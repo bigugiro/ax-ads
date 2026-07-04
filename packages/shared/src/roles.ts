@@ -1,0 +1,58 @@
+/**
+ * Papéis de usuário e controle de acesso (menor privilégio).
+ * Regra do CLAUDE.md: toda rota checa o papel (`owner` | `gestor` | `viewer`).
+ *
+ * Hierarquia de privilégio (maior número = mais poder):
+ *   viewer (1)  →  gestor (2)  →  owner (3)
+ */
+
+export const PAPEIS = ['owner', 'gestor', 'viewer'] as const;
+export type Papel = (typeof PAPEIS)[number];
+
+/** Nível numérico de privilégio por papel. */
+const NIVEL_PRIVILEGIO: Record<Papel, number> = {
+  viewer: 1,
+  gestor: 2,
+  owner: 3,
+};
+
+/** `true` se `papel` tem privilégio ≥ ao papel mínimo exigido. */
+export function temNivelMinimo(papel: Papel, minimo: Papel): boolean {
+  return NIVEL_PRIVILEGIO[papel] >= NIVEL_PRIVILEGIO[minimo];
+}
+
+/**
+ * Ações sensíveis do produto e o papel mínimo que pode executá-las.
+ * Mantém o mapa em um único lugar para auditar permissões facilmente.
+ */
+export const ACOES = [
+  'ver_dashboard',
+  'gerenciar_clientes',
+  'operar_campanha', // pausar/ativar/ajustar budget
+  'aplicar_estrategia',
+  'aprovar_recomendacao',
+  'gerenciar_usuarios',
+  'gerenciar_billing',
+] as const;
+export type Acao = (typeof ACOES)[number];
+
+/** Papel mínimo exigido por ação. */
+const PAPEL_MINIMO_POR_ACAO: Record<Acao, Papel> = {
+  ver_dashboard: 'viewer',
+  gerenciar_clientes: 'gestor',
+  operar_campanha: 'gestor',
+  aplicar_estrategia: 'gestor',
+  aprovar_recomendacao: 'gestor',
+  gerenciar_usuarios: 'owner',
+  gerenciar_billing: 'owner',
+};
+
+/** `true` se o papel pode executar a ação. */
+export function podeExecutar(papel: Papel, acao: Acao): boolean {
+  return temNivelMinimo(papel, PAPEL_MINIMO_POR_ACAO[acao]);
+}
+
+/** Type guard: valida se um valor desconhecido é um `Papel`. */
+export function ehPapel(valor: unknown): valor is Papel {
+  return typeof valor === 'string' && (PAPEIS as readonly string[]).includes(valor);
+}

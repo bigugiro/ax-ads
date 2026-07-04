@@ -1,0 +1,47 @@
+{
+  "name": "ax-ads",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SaaS multi-tenant de tráfego pago + automação + IA para e-commerce (mobile-first).",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @ax-ads/web",
+    "dev:api": "npm run dev --workspace @ax-ads/api",
+    "build": "tsc -b",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "db:migrate": "node scripts/db-migrate.mjs",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "@vitest/coverage-v8": "^2.1.8",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.14.0",
+    "pg": "^8.13.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  }
+}

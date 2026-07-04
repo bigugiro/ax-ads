@@ -1,0 +1,28 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    // Unit + integração (Node). E2E fica no Playwright, fora daqui.
+    include: ['{packages,apps}/*/src/**/*.{test,integration.test}.ts'],
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/**'],
+    environment: 'node',
+    globals: false,
+    setupFiles: ['./vitest.setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reports: ['text', 'html'],
+      reportsDirectory: './coverage',
+      // Foco: lógica de negócio crítica (papéis, schemas, helpers puros da API).
+      // Glue de framework (bootstrap Express, client Supabase) fica fora da meta.
+      include: ['packages/shared/src/**/*.ts', 'apps/api/src/lib/**/*.ts'],
+      exclude: ['**/*.{test,integration.test}.ts', '**/index.ts', '**/*.d.ts'],
+      // Alvo do CLAUDE.md: ≥80% na lógica de negócio crítica.
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
+      },
+    },
+  },
+});

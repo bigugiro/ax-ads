@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Env & secrets — NUNCA commitar
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# Vercel
+.vercel
+
+# Testing
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+tests/.tmp/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Claude Code (config pessoal, não versionar)
+.claude/settings.local.json
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
