@@ -22,15 +22,18 @@
 
 ## 0.1 Status de execução & ambiente (atualizado 2026-07-04)
 
-**Onde estamos:** Sprint 0 construído porém **não fechado** — monorepo, CI, shell mobile (bottom-nav + PWA), auth, papéis, migrations de tenancy (`agencias`, `usuarios`, `clientes`, `audit_log`) com RLS e testes escritos. Bloqueios: zero commits no git, `node_modules` corrompido (vitest não inicia), script `typecheck` quebrado (TS6310 com project references).
+**Sprints 0 e 0.5 FECHADOS em 2026-07-04.** Estado atual:
 
-**Mudanças de contexto:**
+- **Repo canônico: `D:\ax-ads`** (fora do OneDrive). A cópia em `c:\Users\isaia\OneDrive\ax-ads` está obsoleta — pode ser removida.
+- **GitHub:** `github.com/bigugiro/ax-ads` (privado), secrets do Actions configurados. **CI verde** no commit inicial: lint + tipos + 27 testes (unit/integração RLS) + e2e Playwright.
+- **Supabase:** migrations 0001/0002 aplicadas (tenancy + RLS); testes de integração provam o isolamento entre agências.
+- **Vercel:** projeto `ax-ads` linkado ao GitHub (deploy automático no push ao `main`). Build na raiz do monorepo (`npm run build -w @ax-ads/web`), output `apps/web/dist`. Produção: `ax-ads-isaiasmachado.vercel.app`.
+- **Tipagem do banco:** `packages/shared/src/database.ts` espelha as migrations e tipa o cliente Supabase de ponta a ponta — **manter em sincronia a cada migration nova**.
+- **Credenciais em `.env.local`** (raiz do repo): Supabase, Vercel e GitHub. **Nunca commitar nem logar.**
+- **Billing: Pagar.me** (API v5 — assinaturas com cartão/Pix/boleto), no lugar do Stripe. Refletido nas Seções 2, 4, 8 (Sprint 11) e 12.
+- Dívidas conhecidas: bundle do web ~500 kB (code-split por rota previsto na regra de performance, Seção 11); páginas do shell ainda são placeholders.
 
-- **Unidade `D:` disponível (256 GB).** O repo deve migrar para `D:\ax-ads`, fora do OneDrive — o OneDrive desidratou arquivos e corrompeu o `node_modules` (há um `node_modules_broken_*` órfão na raiz a remover).
-- **Credenciais em `.env.local`:** tokens de Supabase (access token, service role, DATABASE_URL), Vercel e GitHub já configurados. **Nunca commitar nem logar** — `.env.local` fica no `.gitignore`.
-- **Billing trocado: Stripe → Pagar.me** (API v5 — assinaturas com cartão/Pix/boleto). Refletido nas Seções 2, 4, 8 (Sprint 11) e 12.
-
-**Próximo passo obrigatório:** Sprint 0.5 (tabela da Seção 8) — recuperar o ambiente e fechar o Sprint 0 com CI verde antes de qualquer feature nova.
+**Próximo passo:** Sprint 1 — Conexão de contas (OAuth Meta + cofre de tokens). Pré-requisito externo a iniciar já: App Meta (dev mode + Sandbox Ad Account) e Business Verification.
 
 ---
 
