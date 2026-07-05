@@ -9,6 +9,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   // Origens permitidas para CORS (CSV). Em dev, default para o Vite local.
   CORS_ORIGINS: z.string().default('http://localhost:5173'),
+  // Segredo que autoriza os jobs de cron (Vercel envia em Authorization: Bearer).
+  // Opcional: sem ele, as rotas de cron respondem 503 (fail-closed).
+  CRON_SECRET: z.string().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

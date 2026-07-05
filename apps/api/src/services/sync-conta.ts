@@ -25,8 +25,14 @@ export interface ResumoSync {
   periodo: PeriodoMetricas;
 }
 
-/** Dias de histórico trazidos no sync (plano: 60–90 dias de métricas). */
+/** Dias de histórico trazidos no sync inicial (plano: 60–90 dias de métricas). */
 export const DIAS_HISTORICO_SYNC = 90;
+
+/**
+ * Janela do sync diário (cron): re-materializa só os últimos dias. Cobre
+ * conversões que "amadurecem" com atraso sem reprocessar 90 dias por conta.
+ */
+export const DIAS_SYNC_INCREMENTAL = 7;
 
 const LOTE_METRICAS = 500;
 
