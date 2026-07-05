@@ -12,9 +12,13 @@ export default defineConfig({
       provider: 'v8',
       reports: ['text', 'html'],
       reportsDirectory: './coverage',
-      // Foco: lógica de negócio crítica (papéis, schemas, helpers puros da API).
+      // Foco: lógica de negócio crítica (papéis, schemas, providers, helpers puros).
       // Glue de framework (bootstrap Express, client Supabase) fica fora da meta.
-      include: ['packages/shared/src/**/*.ts', 'apps/api/src/lib/**/*.ts'],
+      include: [
+        'packages/shared/src/**/*.ts',
+        'apps/api/src/lib/**/*.ts',
+        'apps/api/src/providers/**/*.ts',
+      ],
       exclude: ['**/*.{test,integration.test}.ts', '**/index.ts', '**/*.d.ts'],
       // Alvo do CLAUDE.md: ≥80% na lógica de negócio crítica.
       thresholds: {

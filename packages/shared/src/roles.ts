@@ -28,6 +28,7 @@ export function temNivelMinimo(papel: Papel, minimo: Papel): boolean {
 export const ACOES = [
   'ver_dashboard',
   'gerenciar_clientes',
+  'conectar_conta', // conectar/sincronizar/desconectar conta de anúncio
   'operar_campanha', // pausar/ativar/ajustar budget
   'aplicar_estrategia',
   'aprovar_recomendacao',
@@ -40,6 +41,7 @@ export type Acao = (typeof ACOES)[number];
 const PAPEL_MINIMO_POR_ACAO: Record<Acao, Papel> = {
   ver_dashboard: 'viewer',
   gerenciar_clientes: 'gestor',
+  conectar_conta: 'gestor',
   operar_campanha: 'gestor',
   aplicar_estrategia: 'gestor',
   aprovar_recomendacao: 'gestor',

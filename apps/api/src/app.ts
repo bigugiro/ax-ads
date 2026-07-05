@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { corsOrigins } from './lib/env';
 import { errorHandler, notFound } from './middleware/error';
 import { clientesRouter } from './routes/clientes';
+import { contasRouter } from './routes/contas';
 import { healthRouter } from './routes/health';
 
 export function createApp(): Express {
@@ -16,6 +17,7 @@ export function createApp(): Express {
 
   app.use('/health', healthRouter);
   app.use('/clientes', clientesRouter);
+  app.use('/contas', contasRouter);
 
   app.use(notFound);
   app.use(errorHandler);

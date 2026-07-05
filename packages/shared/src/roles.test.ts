@@ -24,12 +24,14 @@ describe('temNivelMinimo', () => {
 describe('podeExecutar', () => {
   it('viewer só vê o dashboard', () => {
     expect(podeExecutar('viewer', 'ver_dashboard')).toBe(true);
+    expect(podeExecutar('viewer', 'conectar_conta')).toBe(false);
     expect(podeExecutar('viewer', 'operar_campanha')).toBe(false);
     expect(podeExecutar('viewer', 'aplicar_estrategia')).toBe(false);
     expect(podeExecutar('viewer', 'gerenciar_billing')).toBe(false);
   });
 
   it('gestor opera campanha e estratégia, mas não billing/usuários', () => {
+    expect(podeExecutar('gestor', 'conectar_conta')).toBe(true);
     expect(podeExecutar('gestor', 'operar_campanha')).toBe(true);
     expect(podeExecutar('gestor', 'aplicar_estrategia')).toBe(true);
     expect(podeExecutar('gestor', 'aprovar_recomendacao')).toBe(true);
