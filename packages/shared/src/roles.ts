@@ -31,6 +31,7 @@ export const ACOES = [
   'conectar_conta', // conectar/sincronizar/desconectar conta de anúncio
   'operar_campanha', // pausar/ativar/ajustar budget
   'aplicar_estrategia',
+  'gerenciar_crm', // pipelines/estágios/leads/eventos/automações (Sprint 5)
   'aprovar_recomendacao',
   'gerenciar_usuarios',
   'gerenciar_billing',
@@ -44,6 +45,7 @@ const PAPEL_MINIMO_POR_ACAO: Record<Acao, Papel> = {
   conectar_conta: 'gestor',
   operar_campanha: 'gestor',
   aplicar_estrategia: 'gestor',
+  gerenciar_crm: 'gestor',
   aprovar_recomendacao: 'gestor',
   gerenciar_usuarios: 'owner',
   gerenciar_billing: 'owner',

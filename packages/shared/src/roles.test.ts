@@ -30,10 +30,11 @@ describe('podeExecutar', () => {
     expect(podeExecutar('viewer', 'gerenciar_billing')).toBe(false);
   });
 
-  it('gestor opera campanha e estratégia, mas não billing/usuários', () => {
+  it('gestor opera campanha, estratégia e CRM, mas não billing/usuários', () => {
     expect(podeExecutar('gestor', 'conectar_conta')).toBe(true);
     expect(podeExecutar('gestor', 'operar_campanha')).toBe(true);
     expect(podeExecutar('gestor', 'aplicar_estrategia')).toBe(true);
+    expect(podeExecutar('gestor', 'gerenciar_crm')).toBe(true);
     expect(podeExecutar('gestor', 'aprovar_recomendacao')).toBe(true);
     expect(podeExecutar('gestor', 'gerenciar_usuarios')).toBe(false);
     expect(podeExecutar('gestor', 'gerenciar_billing')).toBe(false);

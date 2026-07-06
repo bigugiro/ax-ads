@@ -4,6 +4,7 @@
  * Supabase de ponta a ponta, sem `any` vazando nas queries.
  */
 import type { BudgetTipo, EntidadeMetrica, Plataforma, StatusConta, StatusEntrega } from './ads';
+import type { GatilhoAutomacao, StatusLead } from './crm';
 import type {
   CanalEstrategia,
   ImpactoEstrategia,
@@ -487,6 +488,186 @@ export interface Database {
         };
         Relationships: [];
       };
+      pipelines: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          nome?: string | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      estagios: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          pipeline_id: string;
+          nome: string;
+          ordem: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          pipeline_id: string;
+          nome: string;
+          ordem?: number | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          pipeline_id?: string | undefined;
+          nome?: string | undefined;
+          ordem?: number | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      leads: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          estagio_id: string;
+          nome: string;
+          contato: string;
+          origem: string;
+          valor: number | null;
+          status: StatusLead;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          estagio_id: string;
+          nome: string;
+          contato: string;
+          origem?: string | undefined;
+          valor?: number | null | undefined;
+          status?: StatusLead | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          estagio_id?: string | undefined;
+          nome?: string | undefined;
+          contato?: string | undefined;
+          origem?: string | undefined;
+          valor?: number | null | undefined;
+          status?: StatusLead | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      eventos_lead: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          lead_id: string;
+          tipo: string;
+          payload: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          lead_id: string;
+          tipo: string;
+          payload?: Json | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          lead_id?: string | undefined;
+          tipo?: string | undefined;
+          payload?: Json | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      automacoes: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          gatilho: GatilhoAutomacao;
+          condicoes: Json;
+          acoes: Json;
+          ativo: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          gatilho: GatilhoAutomacao;
+          condicoes?: Json | undefined;
+          acoes?: Json | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          nome?: string | undefined;
+          gatilho?: GatilhoAutomacao | undefined;
+          condicoes?: Json | undefined;
+          acoes?: Json | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      execucoes_automacao: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          automacao_id: string;
+          lead_id: string;
+          resultado: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          automacao_id: string;
+          lead_id: string;
+          resultado?: Json | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          automacao_id?: string | undefined;
+          lead_id?: string | undefined;
+          resultado?: Json | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -504,6 +685,8 @@ export interface Database {
       nivel_estrategia: NivelEstrategia;
       impacto_estrategia: ImpactoEstrategia;
       status_estrategia_aplicada: StatusEstrategiaAplicada;
+      status_lead: StatusLead;
+      gatilho_automacao: GatilhoAutomacao;
     };
     CompositeTypes: { [_ in never]: never };
   };

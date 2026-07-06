@@ -27,6 +27,8 @@ O runner (`scripts/db-migrate.mjs`) é **idempotente**: registra o que já aplic
 | `0006_estrategias_schema.sql` | Catálogo global `estrategias`/`estrategia_versoes` (sem `agencia_id` — conteúdo curado) + `estrategias_aplicadas`/`estrategia_checklist_itens` (dado de tenant) |
 | `0007_estrategias_rls.sql`    | RLS: catálogo global só-leitura para `authenticated`; aplicações/checklist com o padrão de tenant (select por agência, insert/update gestor+)                   |
 | `0008_estrategias_seed.sql`   | Seed idempotente (`on conflict (slug)`) das 15 estratégias da Seção 6.4 do plano                                                                                |
+| `0009_crm_schema.sql`         | `pipelines`/`estagios`/`leads`/`eventos_lead`/`automacoes`/`execucoes_automacao` (dado de tenant)                                                               |
+| `0010_crm_rls.sql`            | RLS do domínio de CRM (mesmo padrão: select por agência, insert/update/delete gestor+)                                                                          |
 
 ## Modelo de segurança (RLS)
 
