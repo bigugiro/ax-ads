@@ -51,3 +51,11 @@ export function apiGet<T>(path: string): Promise<T> {
 export function apiPatch<T>(path: string, body: unknown): Promise<T> {
   return requisitar<T>(path, { method: 'PATCH', body: JSON.stringify(body) });
 }
+
+/** POST autenticado com corpo JSON opcional; devolve `data`. */
+export function apiPost<T>(path: string, body?: unknown): Promise<T> {
+  return requisitar<T>(path, {
+    method: 'POST',
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  });
+}

@@ -4,6 +4,12 @@
  * Supabase de ponta a ponta, sem `any` vazando nas queries.
  */
 import type { BudgetTipo, EntidadeMetrica, Plataforma, StatusConta, StatusEntrega } from './ads';
+import type {
+  CanalEstrategia,
+  ImpactoEstrategia,
+  NivelEstrategia,
+  StatusEstrategiaAplicada,
+} from './estrategias';
 import type { Papel } from './roles';
 import type { Plano, StatusCliente, StatusTenant } from './schemas';
 
@@ -328,6 +334,159 @@ export interface Database {
         };
         Relationships: [];
       };
+      estrategias: {
+        Row: {
+          id: string;
+          slug: string;
+          titulo: string;
+          categoria: string;
+          canal: CanalEstrategia;
+          objetivo: string;
+          quando_usar: string;
+          impacto: ImpactoEstrategia[];
+          pre_requisitos: Json;
+          passos: Json;
+          guardrails: Json;
+          kpi_sucesso: string;
+          nivel: NivelEstrategia;
+          versao: number;
+          ativo: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          slug: string;
+          titulo: string;
+          categoria: string;
+          canal: CanalEstrategia;
+          objetivo: string;
+          quando_usar: string;
+          impacto?: ImpactoEstrategia[] | undefined;
+          pre_requisitos?: Json | undefined;
+          passos?: Json | undefined;
+          guardrails?: Json | undefined;
+          kpi_sucesso: string;
+          nivel?: NivelEstrategia | undefined;
+          versao?: number | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          slug?: string | undefined;
+          titulo?: string | undefined;
+          categoria?: string | undefined;
+          canal?: CanalEstrategia | undefined;
+          objetivo?: string | undefined;
+          quando_usar?: string | undefined;
+          impacto?: ImpactoEstrategia[] | undefined;
+          pre_requisitos?: Json | undefined;
+          passos?: Json | undefined;
+          guardrails?: Json | undefined;
+          kpi_sucesso?: string | undefined;
+          nivel?: NivelEstrategia | undefined;
+          versao?: number | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      estrategia_versoes: {
+        Row: {
+          id: string;
+          estrategia_id: string;
+          versao: number;
+          mudanca: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          estrategia_id: string;
+          versao: number;
+          mudanca: string;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          estrategia_id?: string | undefined;
+          versao?: number | undefined;
+          mudanca?: string | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      estrategias_aplicadas: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          estrategia_id: string;
+          estrategia_versao: number;
+          status: StatusEstrategiaAplicada;
+          aplicada_em: string | null;
+          config: Json;
+          resultado: Json | null;
+          notas: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          estrategia_id: string;
+          estrategia_versao: number;
+          status?: StatusEstrategiaAplicada | undefined;
+          aplicada_em?: string | null | undefined;
+          config?: Json | undefined;
+          resultado?: Json | null | undefined;
+          notas?: string | null | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          estrategia_id?: string | undefined;
+          estrategia_versao?: number | undefined;
+          status?: StatusEstrategiaAplicada | undefined;
+          aplicada_em?: string | null | undefined;
+          config?: Json | undefined;
+          resultado?: Json | null | undefined;
+          notas?: string | null | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      estrategia_checklist_itens: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          estrategia_aplicada_id: string;
+          descricao: string;
+          feito: boolean;
+          ordem: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          estrategia_aplicada_id: string;
+          descricao: string;
+          feito?: boolean | undefined;
+          ordem?: number | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          estrategia_aplicada_id?: string | undefined;
+          descricao?: string | undefined;
+          feito?: boolean | undefined;
+          ordem?: number | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -341,6 +500,10 @@ export interface Database {
       status_entrega: StatusEntrega;
       budget_tipo: BudgetTipo;
       entidade_metrica: EntidadeMetrica;
+      canal_estrategia: CanalEstrategia;
+      nivel_estrategia: NivelEstrategia;
+      impacto_estrategia: ImpactoEstrategia;
+      status_estrategia_aplicada: StatusEstrategiaAplicada;
     };
     CompositeTypes: { [_ in never]: never };
   };

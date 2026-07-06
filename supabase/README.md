@@ -1,6 +1,6 @@
 # Supabase — banco, migrations e RLS
 
-Este diretório contém o schema versionado (migrations SQL), as políticas **RLS** e, futuramente, os seeds (catálogo de estratégias — Sprint 4).
+Este diretório contém o schema versionado (migrations SQL), as políticas **RLS** e os seeds (catálogo de estratégias — Sprint 4).
 
 ## Aplicar migrations (projeto remoto)
 
@@ -17,10 +17,16 @@ O runner (`scripts/db-migrate.mjs`) é **idempotente**: registra o que já aplic
 
 ## Ordem das migrations
 
-| Arquivo                 | Conteúdo                                                                                                                                         |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `0001_init_tenancy.sql` | Enums, tabelas `agencias`/`usuarios`/`clientes`/`audit_log`, funções `app.current_agencia_id()`, `app.current_papel()`, `app.tem_nivel_minimo()` |
-| `0002_rls_policies.sql` | `enable/force row level security` + policies de isolamento por `agencia_id`                                                                      |
+| Arquivo                       | Conteúdo                                                                                                                                                        |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0001_init_tenancy.sql`       | Enums, tabelas `agencias`/`usuarios`/`clientes`/`audit_log`, funções `app.current_agencia_id()`, `app.current_papel()`, `app.tem_nivel_minimo()`                |
+| `0002_rls_policies.sql`       | `enable/force row level security` + policies de isolamento por `agencia_id`                                                                                     |
+| `0003_ads_data.sql`           | Espelho do `AdsProvider`: `contas_anuncio`/`campanhas`/`conjuntos`/`anuncios`/`metricas_diarias`                                                                |
+| `0004_ads_rls.sql`            | RLS do domínio de anúncios (mesmo padrão: select por agência, insert/update/delete gestor+)                                                                     |
+| `0005_metricas_cleanup.sql`   | Trigger de limpeza de métricas órfãs                                                                                                                            |
+| `0006_estrategias_schema.sql` | Catálogo global `estrategias`/`estrategia_versoes` (sem `agencia_id` — conteúdo curado) + `estrategias_aplicadas`/`estrategia_checklist_itens` (dado de tenant) |
+| `0007_estrategias_rls.sql`    | RLS: catálogo global só-leitura para `authenticated`; aplicações/checklist com o padrão de tenant (select por agência, insert/update gestor+)                   |
+| `0008_estrategias_seed.sql`   | Seed idempotente (`on conflict (slug)`) das 15 estratégias da Seção 6.4 do plano                                                                                |
 
 ## Modelo de segurança (RLS)
 

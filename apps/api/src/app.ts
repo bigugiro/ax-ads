@@ -8,6 +8,7 @@ import { campanhasRouter } from './routes/campanhas';
 import { clientesRouter } from './routes/clientes';
 import { contasRouter } from './routes/contas';
 import { cronRouter } from './routes/cron';
+import { estrategiasRouter } from './routes/estrategias';
 import { healthRouter } from './routes/health';
 import { metricasRouter } from './routes/metricas';
 
@@ -24,6 +25,8 @@ export function createApp(): Express {
   app.use('/campanhas', campanhasRouter);
   app.use('/metricas', metricasRouter);
   app.use('/cron', cronRouter);
+  // Rotas com caminhos absolutos próprios (/estrategias, /clientes/:id/estrategias/...).
+  app.use(estrategiasRouter);
 
   app.use(notFound);
   app.use(errorHandler);
