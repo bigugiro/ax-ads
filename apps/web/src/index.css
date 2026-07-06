@@ -2,17 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens de design (CSS vars → white-label no Sprint 12). Valores em canais RGB. */
+/* Design tokens da marca Dispara (BRAND.md §6). Canais RGB → Tailwind aplica
+   opacidade por utilitário. Modo claro é o padrão (superfície creme quente);
+   escuro via prefers-color-scheme + override [data-theme]. */
 :root {
-  --brand: 99 102 241;
-  --brand-fg: 255 255 255;
-  --bg: 248 250 252;
-  --surface: 255 255 255;
-  --text: 15 23 42;
-  --muted: 100 116 139;
-  --border: 226 232 240;
-  --danger: 220 38 38;
-  --success: 22 163 74;
+  --brand: 255 106 44; /* laranja disparo #FF6A2C */
+  --brand-strong: 228 85 27; /* hover #E4551B */
+  --brand-fg: 255 255 255; /* on-primary */
+  --accent: 107 63 228; /* roxo elétrico #6B3FE4 — dado/apoio */
+  --bg: 255 244 236; /* creme #FFF4EC — página */
+  --surface: 255 255 255; /* card */
+  --text: 36 26 22; /* grafite quente #241A16 */
+  --text-secondary: 107 94 86;
+  --muted: 154 141 132;
+  --border: 210 194 183; /* borda quente com definição (mais firme que 12%) */
+  --danger: 226 75 74; /* vermelho corta #E24B4A */
+  --success: 25 169 116; /* verde subiu #19A974 */
+  --warning: 244 169 48; /* âmbar atenção #F4A930 */
+}
+
+/* Modo escuro: grafite quente de fundo, creme como tinta. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --brand: 255 122 66; /* laranja levemente clareado p/ contraste */
+    --brand-strong: 255 106 44;
+    --bg: 26 18 14;
+    --surface: 36 26 22;
+    --text: 255 244 236;
+    --text-secondary: 201 184 173;
+    --muted: 154 141 132;
+    --border: 67 57 52; /* ~14% creme sobre ink */
+  }
+}
+
+[data-theme='dark'] {
+  --brand: 255 122 66;
+  --brand-strong: 255 106 44;
+  --bg: 26 18 14;
+  --surface: 36 26 22;
+  --text: 255 244 236;
+  --text-secondary: 201 184 173;
+  --muted: 154 141 132;
+  --border: 67 57 52;
 }
 
 @layer base {
@@ -25,14 +56,19 @@
   body {
     @apply bg-bg text-content antialiased;
     font-family:
+      'Inter',
       ui-sans-serif,
       system-ui,
       -apple-system,
       'Segoe UI',
       Roboto,
-      Helvetica,
-      Arial,
       sans-serif;
+  }
+
+  /* Wordmark, títulos e números-herói (BRAND.md §4). */
+  .font-display {
+    font-family: 'Baloo 2', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -42,7 +78,7 @@
     @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-50;
   }
   .btn-brand {
-    @apply btn bg-brand text-brand-fg hover:opacity-90;
+    @apply btn bg-brand text-brand-fg hover:bg-brand-strong;
   }
   .btn-ghost {
     @apply btn border border-line bg-surface text-content;
@@ -51,6 +87,7 @@
     @apply min-h-touch w-full rounded-xl border border-line bg-surface px-4 text-base outline-none focus:border-brand focus:ring-2 focus:ring-brand/30;
   }
   .card {
-    @apply rounded-2xl border border-line bg-surface p-4 shadow-sm;
+    @apply rounded-2xl border border-line bg-surface p-4;
+    box-shadow: 0 2px 10px -4px rgb(36 26 22 / 0.14);
   }
 }

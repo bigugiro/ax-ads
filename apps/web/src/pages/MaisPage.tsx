@@ -1,4 +1,5 @@
 /** "Mais": conta, sessão e (futuro) configurações/white-label. */
+import { PoweredByAX } from '../components/Wordmark';
 import { useAuth } from '../auth/AuthContext';
 
 export function MaisPage() {
@@ -6,7 +7,7 @@ export function MaisPage() {
 
   return (
     <section aria-labelledby="mais-title" className="space-y-4">
-      <h1 id="mais-title" className="text-xl font-bold">
+      <h1 id="mais-title" className="font-display text-2xl font-extrabold">
         Mais
       </h1>
 
@@ -20,6 +21,10 @@ export function MaisPage() {
       <button type="button" className="btn-ghost w-full" onClick={() => void sair()}>
         Sair
       </button>
+
+      <div className="pt-6 text-center">
+        <PoweredByAX />
+      </div>
     </section>
   );
 }

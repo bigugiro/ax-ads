@@ -2,12 +2,12 @@
 export function PagePlaceholder({ titulo, descricao }: { titulo: string; descricao: string }) {
   return (
     <section aria-labelledby="page-title">
-      <h1 id="page-title" className="text-xl font-bold">
+      <h1 id="page-title" className="font-display text-2xl font-extrabold">
         {titulo}
       </h1>
-      <p className="mt-1 text-sm text-muted">{descricao}</p>
+      <p className="mt-1 text-sm text-content-2">{descricao}</p>
       <div className="card mt-4 text-sm text-muted">
-        🚧 Em construção — entra no sprint correspondente do plano.
+        🚀 Tá vindo — chega no próximo sprint. Bora, é logo ali.
       </div>
     </section>
   );
