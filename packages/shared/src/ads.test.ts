@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  atualizarCampanhaSchema,
   atualizarContaSchema,
   conectarContaSchema,
   isoDateSchema,
@@ -45,6 +46,21 @@ describe('atualizarContaSchema', () => {
     expect(atualizarContaSchema.safeParse({ status: 'ativa' }).success).toBe(true);
     expect(atualizarContaSchema.safeParse({ status: 'pausada' }).success).toBe(true);
     expect(atualizarContaSchema.safeParse({ status: 'desconectada' }).success).toBe(false);
+  });
+});
+
+describe('atualizarCampanhaSchema', () => {
+  it('aceita status e/ou budget, exige ao menos um', () => {
+    expect(atualizarCampanhaSchema.safeParse({ status: 'pausada' }).success).toBe(true);
+    expect(atualizarCampanhaSchema.safeParse({ budget: 120 }).success).toBe(true);
+    expect(atualizarCampanhaSchema.safeParse({ status: 'ativa', budget: 80 }).success).toBe(true);
+    expect(atualizarCampanhaSchema.safeParse({}).success).toBe(false);
+  });
+
+  it('rejeita status inválido e budget não-positivo', () => {
+    expect(atualizarCampanhaSchema.safeParse({ status: 'arquivada' }).success).toBe(false);
+    expect(atualizarCampanhaSchema.safeParse({ budget: 0 }).success).toBe(false);
+    expect(atualizarCampanhaSchema.safeParse({ budget: -10 }).success).toBe(false);
   });
 });
 

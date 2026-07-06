@@ -4,6 +4,7 @@ import express, { type Express } from 'express';
 import helmet from 'helmet';
 import { corsOrigins } from './lib/env';
 import { errorHandler, notFound } from './middleware/error';
+import { campanhasRouter } from './routes/campanhas';
 import { clientesRouter } from './routes/clientes';
 import { contasRouter } from './routes/contas';
 import { cronRouter } from './routes/cron';
@@ -20,6 +21,7 @@ export function createApp(): Express {
   app.use('/health', healthRouter);
   app.use('/clientes', clientesRouter);
   app.use('/contas', contasRouter);
+  app.use('/campanhas', campanhasRouter);
   app.use('/metricas', metricasRouter);
   app.use('/cron', cronRouter);
 

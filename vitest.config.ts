@@ -8,6 +8,11 @@ export default defineConfig({
     environment: 'node',
     globals: false,
     setupFiles: ['./vitest.setup.ts'],
+    // Os testes de integração batem no MESMO Supabase remoto. Rodar os arquivos
+    // em paralelo gera contenção (e derruba workers: "Worker exited unexpectedly").
+    // Serializar os arquivos torna a suíte determinística — reforça o provider
+    // singleton em memória e evita disputa no banco. Custo de tempo é aceitável.
+    fileParallelism: false,
     coverage: {
       provider: 'v8',
       reports: ['text', 'html'],

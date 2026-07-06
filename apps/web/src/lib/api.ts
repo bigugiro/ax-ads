@@ -11,8 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-/** GET autenticado; devolve `data` do envelope `{ data }`. Lança `ApiError` em falha. */
-export async function apiGet<T>(path: string): Promise<T> {
+async function requisitar<T>(path: string, init: RequestInit): Promise<T> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -20,7 +19,12 @@ export async function apiGet<T>(path: string): Promise<T> {
   if (!token) throw new ApiError(401, 'Sessão expirada — entre novamente.');
 
   const res = await fetch(`${apiUrl}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    ...init,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(init.body ? { 'Content-Type': 'application/json' } : {}),
+      ...init.headers,
+    },
   });
 
   if (!res.ok) {
@@ -36,4 +40,14 @@ export async function apiGet<T>(path: string): Promise<T> {
 
   const corpo = (await res.json()) as { data: T };
   return corpo.data;
+}
+
+/** GET autenticado; devolve `data` do envelope `{ data }`. Lança `ApiError` em falha. */
+export function apiGet<T>(path: string): Promise<T> {
+  return requisitar<T>(path, { method: 'GET' });
+}
+
+/** PATCH autenticado com corpo JSON; devolve `data`. */
+export function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  return requisitar<T>(path, { method: 'PATCH', body: JSON.stringify(body) });
 }

@@ -59,6 +59,25 @@ export const listarContasQuerySchema = z.object({
   cliente_id: uuidSchema.optional(),
 });
 
+/** Query de `GET /campanhas` — filtros opcionais por cliente ou conta. */
+export const listarCampanhasQuerySchema = z.object({
+  cliente_id: uuidSchema.optional(),
+  conta_anuncio_id: uuidSchema.optional(),
+});
+
+/**
+ * Payload de `PATCH /campanhas/:id` — operar campanha (Sprint 3).
+ * status pausa/reativa; budget ajusta o orçamento (positivo). Ao menos um.
+ */
+export const atualizarCampanhaSchema = z
+  .object({
+    status: z.enum(['ativa', 'pausada']).optional(),
+    budget: z.number().positive().max(1_000_000).optional(),
+  })
+  .refine((d) => d.status !== undefined || d.budget !== undefined, {
+    message: 'Informe status e/ou budget',
+  });
+
 // ----- campanhas / conjuntos / anuncios (espelho) -----
 export const campanhaSchema = z.object({
   id: uuidSchema,
@@ -121,6 +140,16 @@ export type ConectarConta = z.infer<typeof conectarContaSchema>;
 export type AtualizarConta = z.infer<typeof atualizarContaSchema>;
 export type ListarContasQuery = z.infer<typeof listarContasQuerySchema>;
 export type Campanha = z.infer<typeof campanhaSchema>;
+export type ListarCampanhasQuery = z.infer<typeof listarCampanhasQuerySchema>;
+export type AtualizarCampanha = z.infer<typeof atualizarCampanhaSchema>;
 export type Conjunto = z.infer<typeof conjuntoSchema>;
+
+/** Campanha do espelho enriquecida com contexto de conta/cliente (GET /campanhas). */
+export interface CampanhaComContexto extends Campanha {
+  cliente_id: string;
+  cliente_nome: string;
+  conta_nome: string;
+  plataforma: Plataforma;
+}
 export type Anuncio = z.infer<typeof anuncioSchema>;
 export type MetricaDiaria = z.infer<typeof metricaDiariaSchema>;
