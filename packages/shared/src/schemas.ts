@@ -86,6 +86,16 @@ export const atualizarClienteSchema = z
     message: 'Informe ao menos um campo para atualizar',
   });
 
+// ----- signup (onboarding self-service, Sprint 9 — rota pública) -----
+export const signupSchema = z.object({
+  nome_agencia: nomeSchema,
+  nome: nomeSchema,
+  email: emailSchema,
+  senha: z.string().min(6, 'Mínimo 6 caracteres').max(72),
+  plano: planoSchema.default('starter'),
+});
+export type Signup = z.infer<typeof signupSchema>;
+
 // ----- Tipos inferidos -----
 export type Agencia = z.infer<typeof agenciaSchema>;
 export type CriarAgencia = z.infer<typeof criarAgenciaSchema>;

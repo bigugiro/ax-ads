@@ -35,6 +35,14 @@ export function MaisPage() {
         <span className="text-muted">→</span>
       </Link>
 
+      <Link to="/mais/assinatura" className="card flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-content">Assinatura</p>
+          <p className="text-xs text-content-2">Plano, trocar ou cancelar</p>
+        </div>
+        <span className="text-muted">→</span>
+      </Link>
+
       <button type="button" className="btn-ghost w-full" onClick={() => void sair()}>
         Sair
       </button>

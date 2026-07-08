@@ -10,6 +10,8 @@ import { EstrategiasPage } from './pages/EstrategiasPage';
 import { LoginPage } from './pages/LoginPage';
 import { MaisPage } from './pages/MaisPage';
 import { PdcaPage } from './pages/PdcaPage';
+import { AssinaturaPage } from './pages/AssinaturaPage';
+import { SignupPage } from './pages/SignupPage';
 import { StudioCriativoPage } from './pages/StudioCriativoPage';
 
 const queryClient = new QueryClient();
@@ -21,6 +23,7 @@ export function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route element={<ProtectedRoute />}>
               <Route element={<AppShell />}>
                 <Route path="/" element={<DashboardPage />} />
@@ -30,6 +33,7 @@ export function App() {
                 <Route path="/mais" element={<MaisPage />} />
                 <Route path="/mais/estudio-criativo" element={<StudioCriativoPage />} />
                 <Route path="/mais/pdca" element={<PdcaPage />} />
+                <Route path="/mais/assinatura" element={<AssinaturaPage />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />

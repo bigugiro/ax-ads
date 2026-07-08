@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuth } from '../auth/AuthContext';
 import { PoweredByAX, Wordmark } from '../components/Wordmark';
@@ -85,6 +85,13 @@ export function LoginPage() {
             {isSubmitting ? 'Entrando…' : 'Entrar'}
           </button>
         </form>
+
+        <p className="mt-4 text-center text-sm text-content-2">
+          Ainda não tem conta?{' '}
+          <Link to="/signup" className="font-medium text-brand">
+            Criar conta
+          </Link>
+        </p>
 
         <div className="mt-8 text-center">
           <PoweredByAX />

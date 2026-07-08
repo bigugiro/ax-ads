@@ -15,6 +15,10 @@ const envSchema = z.object({
   // Studio criativo IA (Sprint 6): Sonnet gera, Haiku classifica. Opcional: sem
   // ela, as rotas /ia/* respondem 503 (fail-closed) — nunca logar o valor.
   ANTHROPIC_API_KEY: z.string().min(1).optional(),
+  // Webhook de billing (Sprint 9): Basic Auth "usuario:senha" configurado no
+  // painel do Pagar.me. Opcional: sem ele, POST /billing/webhook responde 503
+  // (fail-closed). Nenhum provider real usa isto ainda (ver DemoBillingProvider).
+  PAGARME_WEBHOOK_AUTH: z.string().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

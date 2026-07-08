@@ -59,3 +59,24 @@ export function apiPost<T>(path: string, body?: unknown): Promise<T> {
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
   });
 }
+
+/** POST público (sem sessão) — só para rotas sem JWT, como `/auth/signup`. */
+export async function apiPostPublico<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${apiUrl}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    let mensagem = `Erro ${res.status}`;
+    try {
+      const corpo = (await res.json()) as { error?: string };
+      if (corpo.error) mensagem = corpo.error;
+    } catch {
+      // corpo não-JSON: mantém a mensagem genérica
+    }
+    throw new ApiError(res.status, mensagem);
+  }
+  const corpo = (await res.json()) as { data: T };
+  return corpo.data;
+}

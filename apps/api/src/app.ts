@@ -4,6 +4,8 @@ import express, { type Express } from 'express';
 import helmet from 'helmet';
 import { corsOrigins } from './lib/env';
 import { errorHandler, notFound } from './middleware/error';
+import { authRouter } from './routes/auth';
+import { billingRouter } from './routes/billing';
 import { campanhasRouter } from './routes/campanhas';
 import { clientesRouter } from './routes/clientes';
 import { contasRouter } from './routes/contas';
@@ -23,6 +25,10 @@ export function createApp(): Express {
   app.use(express.json({ limit: '1mb' }));
 
   app.use('/health', healthRouter);
+  // Rota pública (sem authenticate): onboarding self-service.
+  app.use(authRouter);
+  // Rotas com caminhos absolutos próprios (/assinatura, /billing/*) — webhook é público.
+  app.use(billingRouter);
   app.use('/clientes', clientesRouter);
   app.use('/contas', contasRouter);
   app.use('/campanhas', campanhasRouter);

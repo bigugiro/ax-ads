@@ -4,6 +4,7 @@
  * Supabase de ponta a ponta, sem `any` vazando nas queries.
  */
 import type { BudgetTipo, EntidadeMetrica, Plataforma, StatusConta, StatusEntrega } from './ads';
+import type { StatusAssinatura } from './billing';
 import type { GatilhoAutomacao, StatusLead } from './crm';
 import type {
   CanalEstrategia,
@@ -736,6 +737,39 @@ export interface Database {
         };
         Relationships: [];
       };
+      assinaturas: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          plano: Plano;
+          status: StatusAssinatura;
+          pagarme_customer_id: string | null;
+          pagarme_subscription_id: string | null;
+          created_at: string;
+          atualizado_em: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          plano: Plano;
+          status?: StatusAssinatura | undefined;
+          pagarme_customer_id?: string | null | undefined;
+          pagarme_subscription_id?: string | null | undefined;
+          created_at?: string | undefined;
+          atualizado_em?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          plano?: Plano | undefined;
+          status?: StatusAssinatura | undefined;
+          pagarme_customer_id?: string | null | undefined;
+          pagarme_subscription_id?: string | null | undefined;
+          created_at?: string | undefined;
+          atualizado_em?: string | undefined;
+        };
+        Relationships: [];
+      };
       geracoes_ia: {
         Row: {
           id: string;
@@ -912,6 +946,7 @@ export interface Database {
       origem_criativo: OrigemCreativo;
       status_criativo: StatusCreativo;
       modelo_ia: ModeloIA;
+      status_assinatura: StatusAssinatura;
       tipo_recomendacao: TipoRecomendacao;
       status_recomendacao: StatusRecomendacao;
       origem_recomendacao: OrigemRecomendacao;
