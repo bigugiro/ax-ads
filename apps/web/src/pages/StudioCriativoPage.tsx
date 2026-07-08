@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiGet, ApiError, apiPost } from '../lib/api';
 
-type Aba = 'copy' | 'headlines' | 'analise';
+type Aba = 'copy' | 'headlines' | 'imagem' | 'analise';
 
 const ROTULO_ANGULO: Record<ClassificacaoCriativo['angulo'], string> = {
   dor: 'Dor',
@@ -71,7 +71,7 @@ export function StudioCriativoPage() {
         aria-label="Seção"
         className="flex rounded-xl border border-line bg-surface p-0.5"
       >
-        {(['copy', 'headlines', 'analise'] as const).map((a) => (
+        {(['copy', 'headlines', 'imagem', 'analise'] as const).map((a) => (
           <button
             key={a}
             role="tab"
@@ -81,7 +81,7 @@ export function StudioCriativoPage() {
               aba === a ? 'bg-brand text-brand-fg' : 'text-muted'
             }`}
           >
-            {a === 'analise' ? 'Análise' : a === 'headlines' ? 'Headlines' : 'Copy'}
+            {a === 'analise' ? 'Análise' : a === 'headlines' ? 'Headlines' : a === 'imagem' ? 'Imagem' : 'Copy'}
           </button>
         ))}
       </div>
@@ -90,6 +90,8 @@ export function StudioCriativoPage() {
         <>
           {aba === 'analise' ? (
             <FormularioAnalise clienteId={clienteId} />
+          ) : aba === 'imagem' ? (
+            <FormularioImagem clienteId={clienteId} />
           ) : (
             <FormularioGeracao clienteId={clienteId} tipo={aba} />
           )}
@@ -210,6 +212,104 @@ function FormularioGeracao({ clienteId, tipo }: { clienteId: string; tipo: 'copy
   );
 }
 
+// ----- Imagem -----
+
+function FormularioImagem({ clienteId }: { clienteId: string }) {
+  const qc = useQueryClient();
+  const [produto, setProduto] = useState('');
+  const [estilo, setEstilo] = useState('');
+  const [quantidade, setQuantidade] = useState(2);
+  const [erro, setErro] = useState<string | null>(null);
+  const [resultado, setResultado] = useState<CriativoComVariacoes | null>(null);
+
+  const gerar = useMutation({
+    mutationFn: () =>
+      apiPost<{ criativo: CriativoComVariacoes; custo: number }>('/ia/imagem', {
+        cliente_id: clienteId,
+        produto,
+        ...(estilo ? { estilo } : {}),
+        quantidade,
+      }),
+    onSuccess: (data) => {
+      setErro(null);
+      setResultado(data.criativo);
+      void qc.invalidateQueries({ queryKey: ['criativos', clienteId] });
+      void qc.invalidateQueries({ queryKey: ['geracoes-ia', clienteId] });
+    },
+    onError: (e) => setErro(e instanceof ApiError ? e.message : 'Não rolou. Tenta de novo.'),
+  });
+
+  return (
+    <div className="space-y-3">
+      <p className="rounded-xl bg-accent/10 px-3 py-2 text-xs text-accent">
+        Provider placeholder (demo) — gera um mockup determinístico, sem custo. Pluga a API real de
+        imagem quando tiver a chave.
+      </p>
+      <form
+        className="card space-y-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!produto.trim()) {
+            setErro('Descreve o produto pra gerar a imagem.');
+            return;
+          }
+          setResultado(null);
+          gerar.mutate();
+        }}
+      >
+        <input
+          className="field text-sm"
+          placeholder="Produto ou loja"
+          value={produto}
+          onChange={(e) => setProduto(e.target.value)}
+          aria-label="Produto ou loja"
+        />
+        <input
+          className="field text-sm"
+          placeholder="Estilo visual (opcional)"
+          value={estilo}
+          onChange={(e) => setEstilo(e.target.value)}
+          aria-label="Estilo visual"
+        />
+        <label className="block text-xs font-medium text-muted">
+          Quantidade de variações
+          <select
+            className="field mt-1 text-sm"
+            value={quantidade}
+            onChange={(e) => setQuantidade(Number(e.target.value))}
+          >
+            {[1, 2, 3, 4].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+        {erro && <p className="text-xs text-danger">{erro}</p>}
+        <button type="submit" className="btn-brand w-full" disabled={gerar.isPending}>
+          {gerar.isPending ? 'Gerando…' : 'Gerar imagens'}
+        </button>
+      </form>
+
+      {resultado && (
+        <div className="card space-y-2">
+          <p className="text-xs font-semibold uppercase text-muted">Variações geradas</p>
+          <div className="grid grid-cols-2 gap-2">
+            {resultado.variacoes.map((v) => (
+              <img
+                key={v.id}
+                src={v.conteudo}
+                alt="Variação de imagem gerada"
+                className="aspect-square w-full rounded-xl border border-line object-cover"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ----- Análise -----
 
 function FormularioAnalise({ clienteId }: { clienteId: string }) {
@@ -321,13 +421,26 @@ function Historico({ clienteId }: { clienteId: string }) {
                 {new Date(c.created_at).toLocaleDateString('pt-BR')}
               </span>
             </div>
-            <ul className="space-y-1">
-              {c.variacoes.map((v) => (
-                <li key={v.id} className="text-xs text-content-2">
-                  {v.conteudo}
-                </li>
-              ))}
-            </ul>
+            {c.tipo === 'imagem' ? (
+              <div className="grid grid-cols-3 gap-1.5">
+                {c.variacoes.map((v) => (
+                  <img
+                    key={v.id}
+                    src={v.conteudo}
+                    alt="Variação de imagem gerada"
+                    className="aspect-square w-full rounded-lg border border-line object-cover"
+                  />
+                ))}
+              </div>
+            ) : (
+              <ul className="space-y-1">
+                {c.variacoes.map((v) => (
+                  <li key={v.id} className="text-xs text-content-2">
+                    {v.conteudo}
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>

@@ -7,10 +7,11 @@ import {
   analisarCriativoSchema,
   gerarCopySchema,
   gerarHeadlinesSchema,
+  gerarImagemSchema,
   listarCriativosQuerySchema,
   uuidSchema,
 } from '@ax-ads/shared';
-import type { AnalisarCriativo, GerarCopy, GerarHeadlines } from '@ax-ads/shared';
+import type { AnalisarCriativo, GerarCopy, GerarHeadlines, GerarImagem } from '@ax-ads/shared';
 import { Router } from 'express';
 import { getAuth } from '../lib/auth-context';
 import { asyncHandler, HttpError } from '../lib/http';
@@ -19,6 +20,7 @@ import { requireAcao } from '../middleware/require-role';
 import { validateBody, validateParam } from '../middleware/validate';
 import {
   analisarCriativo,
+  gerarImagens,
   gerarVariacoes,
   listarCriativos,
   listarGeracoesIA,
@@ -60,6 +62,18 @@ iaRouter.post(
     const { db, agenciaId } = getAuth(req);
     const payload = req.body as AnalisarCriativo;
     const data = await analisarCriativo(db, { agenciaId, payload });
+    res.status(201).json({ data });
+  }),
+);
+
+iaRouter.post(
+  '/ia/imagem',
+  requireAcao('gerenciar_criativos'),
+  validateBody(gerarImagemSchema),
+  asyncHandler(async (req, res) => {
+    const { db, agenciaId } = getAuth(req);
+    const payload = req.body as GerarImagem;
+    const data = await gerarImagens(db, { agenciaId, payload });
     res.status(201).json({ data });
   }),
 );

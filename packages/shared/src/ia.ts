@@ -13,7 +13,7 @@ import { uuidSchema } from './schemas';
 export const tipoCreativoSchema = z.enum(['copy', 'headline', 'imagem']);
 export const origemCreativoSchema = z.enum(['ia', 'manual']);
 export const statusCreativoSchema = z.enum(['rascunho', 'aprovado', 'descartado']);
-export const modeloIASchema = z.enum(['haiku', 'sonnet']);
+export const modeloIASchema = z.enum(['haiku', 'sonnet', 'imagem']);
 
 export type TipoCreativo = z.infer<typeof tipoCreativoSchema>;
 export type OrigemCreativo = z.infer<typeof origemCreativoSchema>;
@@ -89,6 +89,15 @@ export const analisarCriativoSchema = z.object({
 });
 export type AnalisarCriativo = z.infer<typeof analisarCriativoSchema>;
 
+/** Payload de `POST /ia/imagem` — gera variações de imagem de anúncio. */
+export const gerarImagemSchema = z.object({
+  cliente_id: uuidSchema,
+  produto: z.string().trim().min(1).max(200),
+  estilo: z.string().trim().min(1).max(120).optional(),
+  quantidade: z.number().int().min(1).max(4).default(2),
+});
+export type GerarImagem = z.infer<typeof gerarImagemSchema>;
+
 /** Classificação estruturada devolvida pela análise via Haiku. */
 export const classificacaoCriativoSchema = z.object({
   angulo: z.enum(['dor', 'desejo', 'prova_social', 'oferta', 'curiosidade']),
@@ -113,6 +122,10 @@ export type ListarCriativosQuery = z.infer<typeof listarCriativosQuerySchema>;
 export const PRECOS_IA: Record<ModeloIA, { input: number; output: number }> = {
   sonnet: { input: 3.0, output: 15.0 }, // claude-sonnet-5
   haiku: { input: 1.0, output: 5.0 }, // claude-haiku-4-5
+  // Geração de imagem não é por token — o provider `demo` (Sprint 8) não tem
+  // custo real; um provedor de imagem real calcula o próprio custo por
+  // chamada (preço fixo por imagem), sem passar por `custoGeracao`.
+  imagem: { input: 0, output: 0 },
 };
 
 /** Custo em USD de uma chamada, a partir dos tokens consumidos. */

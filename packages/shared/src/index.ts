@@ -5,6 +5,7 @@ export * from './crm';
 export * from './database';
 export * from './estrategias';
 export * from './ia';
+export * from './imagem-provider';
 export * from './metricas';
 export * from './pdca';
 export * from './roles';

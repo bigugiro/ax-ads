@@ -15,8 +15,10 @@ import {
   type ClassificacaoCriativo,
   type CriativoComVariacoes,
   type GerarCopy,
+  type GerarImagem,
   type Json,
   type ListarCriativosQuery,
+  type ModeloIA,
   type TipoCreativo,
   type VariacaoCriativo,
 } from '@ax-ads/shared';
@@ -24,6 +26,7 @@ import { z } from 'zod';
 import { getAnthropicClient, MODELOS_ANTHROPIC } from '../lib/anthropic';
 import { HttpError } from '../lib/http';
 import type { DbClient } from '../lib/supabase';
+import { getImagemProvider } from '../providers/imagem-index';
 
 const variacoesOutputSchema = z.object({ variacoes: z.array(z.string().min(1)).min(1) });
 
@@ -85,7 +88,7 @@ async function registrarGeracao(
   params: {
     agenciaId: string;
     clienteId: string;
-    modelo: 'sonnet' | 'haiku';
+    modelo: ModeloIA;
     prompt: string;
     resultado: unknown;
     tokensIn: number;
@@ -228,6 +231,53 @@ export async function analisarCriativo(
   });
 
   return { classificacao: parsed.data, custo };
+}
+
+/** Gera `quantidade` variações de imagem (placeholder `demo`, sem custo) e persiste tudo. */
+export async function gerarImagens(
+  db: DbClient,
+  params: { agenciaId: string; payload: GerarImagem },
+): Promise<{ criativo: CriativoComVariacoes; custo: number }> {
+  const { agenciaId, payload } = params;
+
+  const { data: cliente, error: cliErr } = await db
+    .from('clientes')
+    .select('id')
+    .eq('id', payload.cliente_id)
+    .maybeSingle();
+  if (cliErr) throw new HttpError(500, 'Falha ao carregar cliente', cliErr.message);
+  if (!cliente) throw new HttpError(404, 'Cliente não encontrado');
+
+  const prompt = payload.estilo
+    ? `${payload.produto} — estilo: ${payload.estilo}`
+    : payload.produto;
+
+  const imagens = await getImagemProvider().gerarImagens({ prompt, quantidade: payload.quantidade });
+
+  const { data: criativo, error: criErr } = await db
+    .from('criativos')
+    .insert({ agencia_id: agenciaId, cliente_id: payload.cliente_id, tipo: 'imagem', conteudo: prompt })
+    .select('*')
+    .single();
+  if (criErr || !criativo) throw new HttpError(500, 'Falha ao salvar criativo', criErr?.message);
+
+  const { data: variacoes, error: varErr } = await db
+    .from('variacoes_criativo')
+    .insert(imagens.map(({ url }) => ({ agencia_id: agenciaId, criativo_id: criativo.id, conteudo: url })))
+    .select('*');
+  if (varErr) throw new HttpError(500, 'Falha ao salvar variações', varErr.message);
+
+  const { custo } = await registrarGeracao(db, {
+    agenciaId,
+    clienteId: payload.cliente_id,
+    modelo: 'imagem',
+    prompt,
+    resultado: { variacoes: imagens.length },
+    tokensIn: 0,
+    tokensOut: 0,
+  });
+
+  return { criativo: { ...criativo, variacoes }, custo };
 }
 
 export async function listarCriativos(
