@@ -16,12 +16,28 @@ export function RocketMark({ className = 'h-6 w-6' }: { className?: string }) {
   );
 }
 
-/** Assinatura "Dispara" com o foguete. `size` controla a escala do texto. */
-export function Wordmark({ size = 'text-2xl' }: { size?: string }) {
+/**
+ * Assinatura "Dispara" com o foguete. `size` controla a escala do texto.
+ * White-label básico (Sprint 10): `nome`/`logoUrl` sobrescrevem a marca
+ * Dispara pela da agência quando configurada em `agencias.marca_*`.
+ */
+export function Wordmark({
+  size = 'text-2xl',
+  nome,
+  logoUrl,
+}: {
+  size?: string;
+  nome?: string | null | undefined;
+  logoUrl?: string | null | undefined;
+}) {
   return (
     <span className="inline-flex items-center gap-1.5 text-brand">
-      <RocketMark className="h-[1.1em] w-[1.1em]" />
-      <span className={`font-display font-extrabold leading-none ${size}`}>Dispara</span>
+      {logoUrl ? (
+        <img src={logoUrl} alt="" className="h-[1.3em] w-[1.3em] rounded object-contain" />
+      ) : (
+        <RocketMark className="h-[1.1em] w-[1.1em]" />
+      )}
+      <span className={`font-display font-extrabold leading-none ${size}`}>{nome || 'Dispara'}</span>
     </span>
   );
 }

@@ -34,6 +34,9 @@ export interface Database {
           nome: string;
           plano: Plano;
           status: StatusTenant;
+          marca_nome: string | null;
+          marca_cor: string | null;
+          marca_logo_url: string | null;
           created_at: string;
         };
         Insert: {
@@ -41,6 +44,9 @@ export interface Database {
           nome: string;
           plano?: Plano | undefined;
           status?: StatusTenant | undefined;
+          marca_nome?: string | null | undefined;
+          marca_cor?: string | null | undefined;
+          marca_logo_url?: string | null | undefined;
           created_at?: string | undefined;
         };
         Update: {
@@ -48,6 +54,9 @@ export interface Database {
           nome?: string | undefined;
           plano?: Plano | undefined;
           status?: StatusTenant | undefined;
+          marca_nome?: string | null | undefined;
+          marca_cor?: string | null | undefined;
+          marca_logo_url?: string | null | undefined;
           created_at?: string | undefined;
         };
         Relationships: [];
@@ -60,6 +69,7 @@ export interface Database {
           email: string;
           papel: Papel;
           auth_supabase_id: string;
+          super_admin: boolean;
           created_at: string;
         };
         Insert: {
@@ -69,6 +79,7 @@ export interface Database {
           email: string;
           papel?: Papel | undefined;
           auth_supabase_id: string;
+          super_admin?: boolean | undefined;
           created_at?: string | undefined;
         };
         Update: {
@@ -78,6 +89,7 @@ export interface Database {
           email?: string | undefined;
           papel?: Papel | undefined;
           auth_supabase_id?: string | undefined;
+          super_admin?: boolean | undefined;
           created_at?: string | undefined;
         };
         Relationships: [];

@@ -14,3 +14,15 @@ export function requireAcao(acao: Acao): RequestHandler {
     next();
   };
 }
+
+/**
+ * Exige `usuarios.super_admin = true` (Sprint 10) — gate das rotas `/admin/*`,
+ * que enxergam TODAS as agências (cross-tenant, fora do escopo normal de RLS).
+ */
+export const requireSuperAdmin: RequestHandler = (req, _res, next) => {
+  const { superAdmin } = getAuth(req);
+  if (!superAdmin) {
+    throw new HttpError(403, 'Acesso restrito ao operador do SaaS');
+  }
+  next();
+};

@@ -11,6 +11,8 @@ export interface AuthContext {
   usuarioId: string;
   agenciaId: string;
   papel: Papel;
+  /** Operador do SaaS (Sprint 10) — nunca setável via API, só SQL direto. */
+  superAdmin: boolean;
   /** Cliente Supabase escopado no usuário — RLS aplicada. */
   db: DbClient;
 }

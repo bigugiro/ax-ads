@@ -8,6 +8,7 @@ import { signupSchema } from '@ax-ads/shared';
 import type { Signup } from '@ax-ads/shared';
 import { Router } from 'express';
 import { asyncHandler } from '../lib/http';
+import { rateLimit } from '../lib/rate-limit';
 import { validateBody } from '../middleware/validate';
 import { criarSignup } from '../services/billing';
 
@@ -15,6 +16,8 @@ export const authRouter: Router = Router();
 
 authRouter.post(
   '/auth/signup',
+  // Pen-test básico (Sprint 10): rota pública sem JWT — limita abuso/credential stuffing.
+  rateLimit('auth-signup', { limite: 5, janelaMs: 60_000 }),
   validateBody(signupSchema),
   asyncHandler(async (req, res) => {
     const payload = req.body as Signup;

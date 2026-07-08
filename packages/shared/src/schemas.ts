@@ -23,17 +23,34 @@ const emailSchema = z.string().trim().toLowerCase().email();
 const siteSchema = z.union([z.literal(''), z.string().url()]).optional();
 
 // ----- agencias -----
+const corHexSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Cor deve ser hex, ex.: #FF6A2C');
+
 export const agenciaSchema = z.object({
   id: uuidSchema,
   nome: nomeSchema,
   plano: planoSchema,
   status: statusTenantSchema,
+  marca_nome: z.string().trim().min(1).max(60).nullable(),
+  marca_cor: corHexSchema.nullable(),
+  marca_logo_url: z.string().url().nullable(),
   created_at: isoDateTimeSchema,
 });
 export const criarAgenciaSchema = z.object({
   nome: nomeSchema,
   plano: planoSchema.default('free'),
 });
+
+/** Payload de `PATCH /agencias/marca` (Sprint 10 — white-label básico). */
+export const atualizarMarcaSchema = z
+  .object({
+    marca_nome: z.string().trim().min(1).max(60).nullable().optional(),
+    marca_cor: corHexSchema.nullable().optional(),
+    marca_logo_url: z.union([z.literal(''), z.string().url()]).nullable().optional(),
+  })
+  .refine((v) => Object.values(v).some((x) => x !== undefined), {
+    message: 'Informe ao menos um campo para atualizar',
+  });
+export type AtualizarMarca = z.infer<typeof atualizarMarcaSchema>;
 
 // ----- usuarios -----
 export const usuarioSchema = z.object({
@@ -43,6 +60,8 @@ export const usuarioSchema = z.object({
   email: emailSchema,
   papel: papelSchema,
   auth_supabase_id: uuidSchema,
+  // Operador do SaaS (Sprint 10) — nunca setável via API, só SQL direto.
+  super_admin: z.boolean(),
   created_at: isoDateTimeSchema,
 });
 export const criarUsuarioSchema = z.object({
@@ -93,6 +112,11 @@ export const signupSchema = z.object({
   email: emailSchema,
   senha: z.string().min(6, 'Mínimo 6 caracteres').max(72),
   plano: planoSchema.default('starter'),
+  // LGPD (Sprint 10): consentimento explícito, obrigatório — vira registro
+  // de auditoria (não é só um checkbox decorativo no front).
+  aceite_termos: z.literal(true, {
+    errorMap: () => ({ message: 'É preciso aceitar os Termos de Uso e a Política de Privacidade' }),
+  }),
 });
 export type Signup = z.infer<typeof signupSchema>;
 

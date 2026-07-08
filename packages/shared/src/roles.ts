@@ -36,6 +36,7 @@ export const ACOES = [
   'aprovar_recomendacao',
   'gerenciar_usuarios',
   'gerenciar_billing',
+  'gerenciar_agencia', // marca (white-label) e exclusão de conta (LGPD) — Sprint 10
 ] as const;
 export type Acao = (typeof ACOES)[number];
 
@@ -51,6 +52,7 @@ const PAPEL_MINIMO_POR_ACAO: Record<Acao, Papel> = {
   aprovar_recomendacao: 'gestor',
   gerenciar_usuarios: 'owner',
   gerenciar_billing: 'owner',
+  gerenciar_agencia: 'owner',
 };
 
 /** `true` se o papel pode executar a ação. */

@@ -12,6 +12,7 @@ import { getAuth } from '../lib/auth-context';
 import { verificarBillingWebhookAuth } from '../lib/billing-webhook-auth';
 import { getEnv } from '../lib/env';
 import { asyncHandler, HttpError } from '../lib/http';
+import { rateLimit } from '../lib/rate-limit';
 import { authenticate } from '../middleware/auth';
 import { requireAcao } from '../middleware/require-role';
 import { validateBody } from '../middleware/validate';
@@ -80,6 +81,8 @@ billingRouter.post(
 
 billingRouter.post(
   '/billing/webhook',
+  // Pen-test básico (Sprint 10): rota pública — limita abuso mesmo autenticado por Basic Auth.
+  rateLimit('billing-webhook', { limite: 30, janelaMs: 60_000 }),
   validateBody(webhookBillingSchema),
   asyncHandler(async (req, res) => {
     const status = verificarBillingWebhookAuth(req.header('authorization'), getEnv().PAGARME_WEBHOOK_AUTH);

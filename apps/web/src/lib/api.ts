@@ -60,6 +60,30 @@ export function apiPost<T>(path: string, body?: unknown): Promise<T> {
   });
 }
 
+/** DELETE autenticado — sem corpo de resposta (ex.: `204 No Content`). */
+export async function apiDelete(path: string): Promise<void> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) throw new ApiError(401, 'Sessão expirada — entre novamente.');
+
+  const res = await fetch(`${apiUrl}${path}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    let mensagem = `Erro ${res.status}`;
+    try {
+      const corpo = (await res.json()) as { error?: string };
+      if (corpo.error) mensagem = corpo.error;
+    } catch {
+      // corpo não-JSON (ou vazio): mantém a mensagem genérica
+    }
+    throw new ApiError(res.status, mensagem);
+  }
+}
+
 /** POST público (sem sessão) — só para rotas sem JWT, como `/auth/signup`. */
 export async function apiPostPublico<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${apiUrl}${path}`, {

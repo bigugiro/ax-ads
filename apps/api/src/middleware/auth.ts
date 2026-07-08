@@ -29,7 +29,7 @@ export const authenticate = asyncHandler(async (req, _res, next) => {
   // Carrega o perfil na agência (RLS permite ler o próprio registro).
   const { data: perfil, error: perfilError } = await db
     .from('usuarios')
-    .select('id, agencia_id, papel')
+    .select('id, agencia_id, papel, super_admin')
     .eq('auth_supabase_id', userData.user.id)
     .single();
 
@@ -45,6 +45,7 @@ export const authenticate = asyncHandler(async (req, _res, next) => {
     usuarioId: perfil.id,
     agenciaId: perfil.agencia_id,
     papel: perfil.papel,
+    superAdmin: perfil.super_admin,
     db,
   };
   next();

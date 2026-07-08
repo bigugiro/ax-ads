@@ -65,7 +65,7 @@ export async function criarSignup(
       acao: 'signup',
       entidade: 'assinatura',
       antes: null,
-      depois: { plano: payload.plano, status: criada.status },
+      depois: { plano: payload.plano, status: criada.status, aceite_termos: payload.aceite_termos },
     });
 
     return { agenciaId: agencia.id, plano: payload.plano, status: criada.status };

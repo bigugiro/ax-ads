@@ -85,6 +85,7 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
       email: emailOwner,
       senha: senhaOwner,
       plano: 'pro',
+      aceite_termos: true,
     });
     expect(res.status).toBe(201);
     const corpo = (res.body as { data: { agenciaId: string; plano: string; status: string } }).data;
@@ -122,6 +123,7 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
       email: emailOwner,
       senha: 'OutraSenha123',
       plano: 'starter',
+      aceite_termos: true,
     });
     expect(res.status).toBe(409);
   }, 20_000);

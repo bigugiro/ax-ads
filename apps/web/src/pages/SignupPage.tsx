@@ -24,6 +24,9 @@ const signupFormSchema = z.object({
   email: z.string().email('E-mail inválido'),
   senha: z.string().min(6, 'Mínimo 6 caracteres'),
   plano: z.enum(['starter', 'pro', 'agency']),
+  aceite_termos: z
+    .boolean()
+    .refine((v) => v, { message: 'É preciso aceitar os Termos de Uso e a Política de Privacidade' }),
 });
 type SignupForm = z.infer<typeof signupFormSchema>;
 
@@ -39,7 +42,7 @@ export function SignupPage() {
     formState: { errors, isSubmitting },
   } = useForm<SignupForm>({
     resolver: zodResolver(signupFormSchema),
-    defaultValues: { plano: 'pro' },
+    defaultValues: { plano: 'pro', aceite_termos: false },
   });
   const planoEscolhido = watch('plano');
 
@@ -54,6 +57,7 @@ export function SignupPage() {
         email: form.email,
         senha: form.senha,
         plano: form.plano,
+        aceite_termos: form.aceite_termos,
       });
       await entrar(form.email, form.senha);
       navigate('/', { replace: true });
@@ -144,6 +148,14 @@ export function SignupPage() {
           <p className="rounded-xl bg-accent/10 px-3 py-2 text-xs text-accent">
             Provider placeholder (demo) — a assinatura ativa na hora, sem cobrança real ainda.
           </p>
+
+          <label className="flex items-start gap-2 text-xs text-content-2">
+            <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" {...register('aceite_termos')} />
+            <span>Li e aceito os Termos de Uso e a Política de Privacidade.</span>
+          </label>
+          {errors.aceite_termos && (
+            <p className="text-sm text-danger">{errors.aceite_termos.message}</p>
+          )}
 
           {erro && (
             <p role="alert" className="text-sm text-danger">
