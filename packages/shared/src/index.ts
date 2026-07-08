@@ -4,6 +4,7 @@ export * from './ads-provider';
 export * from './crm';
 export * from './database';
 export * from './estrategias';
+export * from './ia';
 export * from './metricas';
 export * from './roles';
 export * from './schemas';

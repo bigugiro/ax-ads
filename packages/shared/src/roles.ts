@@ -32,6 +32,7 @@ export const ACOES = [
   'operar_campanha', // pausar/ativar/ajustar budget
   'aplicar_estrategia',
   'gerenciar_crm', // pipelines/estágios/leads/eventos/automações (Sprint 5)
+  'gerenciar_criativos', // studio criativo IA: gerar copy/headlines, analisar (Sprint 6)
   'aprovar_recomendacao',
   'gerenciar_usuarios',
   'gerenciar_billing',
@@ -46,6 +47,7 @@ const PAPEL_MINIMO_POR_ACAO: Record<Acao, Papel> = {
   operar_campanha: 'gestor',
   aplicar_estrategia: 'gestor',
   gerenciar_crm: 'gestor',
+  gerenciar_criativos: 'gestor',
   aprovar_recomendacao: 'gestor',
   gerenciar_usuarios: 'owner',
   gerenciar_billing: 'owner',

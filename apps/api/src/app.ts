@@ -11,6 +11,7 @@ import { cronRouter } from './routes/cron';
 import { crmRouter } from './routes/crm';
 import { estrategiasRouter } from './routes/estrategias';
 import { healthRouter } from './routes/health';
+import { iaRouter } from './routes/ia';
 import { metricasRouter } from './routes/metricas';
 
 export function createApp(): Express {
@@ -30,6 +31,8 @@ export function createApp(): Express {
   app.use(estrategiasRouter);
   // Rotas com caminhos absolutos próprios (/pipelines, /leads, /automacoes).
   app.use(crmRouter);
+  // Rotas com caminhos absolutos próprios (/ia/*, /clientes/:id/criativos, .../geracoes-ia).
+  app.use(iaRouter);
 
   app.use(notFound);
   app.use(errorHandler);

@@ -11,6 +11,7 @@ import type {
   NivelEstrategia,
   StatusEstrategiaAplicada,
 } from './estrategias';
+import type { ModeloIA, OrigemCreativo, StatusCreativo, TipoCreativo } from './ia';
 import type { Papel } from './roles';
 import type { Plano, StatusCliente, StatusTenant } from './schemas';
 
@@ -668,6 +669,105 @@ export interface Database {
         };
         Relationships: [];
       };
+      criativos: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          tipo: TipoCreativo;
+          conteudo: string;
+          origem: OrigemCreativo;
+          status: StatusCreativo;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          tipo: TipoCreativo;
+          conteudo: string;
+          origem?: OrigemCreativo | undefined;
+          status?: StatusCreativo | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          tipo?: TipoCreativo | undefined;
+          conteudo?: string | undefined;
+          origem?: OrigemCreativo | undefined;
+          status?: StatusCreativo | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      variacoes_criativo: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          criativo_id: string;
+          conteudo: string;
+          metrica_ref: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          criativo_id: string;
+          conteudo: string;
+          metrica_ref?: string | null | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          criativo_id?: string | undefined;
+          conteudo?: string | undefined;
+          metrica_ref?: string | null | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      geracoes_ia: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          modelo: ModeloIA;
+          prompt: string;
+          resultado: Json;
+          tokens_in: number;
+          tokens_out: number;
+          custo: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          modelo: ModeloIA;
+          prompt: string;
+          resultado: Json;
+          tokens_in: number;
+          tokens_out: number;
+          custo: number;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          modelo?: ModeloIA | undefined;
+          prompt?: string | undefined;
+          resultado?: Json | undefined;
+          tokens_in?: number | undefined;
+          tokens_out?: number | undefined;
+          custo?: number | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -687,6 +787,10 @@ export interface Database {
       status_estrategia_aplicada: StatusEstrategiaAplicada;
       status_lead: StatusLead;
       gatilho_automacao: GatilhoAutomacao;
+      tipo_criativo: TipoCreativo;
+      origem_criativo: OrigemCreativo;
+      status_criativo: StatusCreativo;
+      modelo_ia: ModeloIA;
     };
     CompositeTypes: { [_ in never]: never };
   };

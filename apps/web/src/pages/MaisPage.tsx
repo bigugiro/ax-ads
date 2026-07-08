@@ -1,4 +1,5 @@
 /** "Mais": conta, sessão e (futuro) configurações/white-label. */
+import { Link } from 'react-router-dom';
 import { PoweredByAX } from '../components/Wordmark';
 import { useAuth } from '../auth/AuthContext';
 
@@ -17,6 +18,14 @@ export function MaisPage() {
           {session?.user.email ?? '—'}
         </p>
       </div>
+
+      <Link to="/mais/estudio-criativo" className="card flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-content">Studio criativo IA</p>
+          <p className="text-xs text-content-2">Copy, headlines e classificação por IA</p>
+        </div>
+        <span className="text-muted">→</span>
+      </Link>
 
       <button type="button" className="btn-ghost w-full" onClick={() => void sair()}>
         Sair

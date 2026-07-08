@@ -29,6 +29,8 @@ O runner (`scripts/db-migrate.mjs`) é **idempotente**: registra o que já aplic
 | `0008_estrategias_seed.sql`   | Seed idempotente (`on conflict (slug)`) das 15 estratégias da Seção 6.4 do plano                                                                                |
 | `0009_crm_schema.sql`         | `pipelines`/`estagios`/`leads`/`eventos_lead`/`automacoes`/`execucoes_automacao` (dado de tenant)                                                               |
 | `0010_crm_rls.sql`            | RLS do domínio de CRM (mesmo padrão: select por agência, insert/update/delete gestor+)                                                                          |
+| `0011_ia_schema.sql`          | `criativos`/`variacoes_criativo`/`geracoes_ia` (Studio criativo IA, dado de tenant)                                                                             |
+| `0012_ia_rls.sql`             | RLS do domínio de IA/criativos (mesmo padrão: select por agência, insert/update/delete gestor+)                                                                 |
 
 ## Modelo de segurança (RLS)
 

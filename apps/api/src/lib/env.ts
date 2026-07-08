@@ -12,6 +12,9 @@ const envSchema = z.object({
   // Segredo que autoriza os jobs de cron (Vercel envia em Authorization: Bearer).
   // Opcional: sem ele, as rotas de cron respondem 503 (fail-closed).
   CRON_SECRET: z.string().min(1).optional(),
+  // Studio criativo IA (Sprint 6): Sonnet gera, Haiku classifica. Opcional: sem
+  // ela, as rotas /ia/* respondem 503 (fail-closed) — nunca logar o valor.
+  ANTHROPIC_API_KEY: z.string().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
