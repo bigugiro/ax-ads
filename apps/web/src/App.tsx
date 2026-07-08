@@ -9,6 +9,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { EstrategiasPage } from './pages/EstrategiasPage';
 import { LoginPage } from './pages/LoginPage';
 import { MaisPage } from './pages/MaisPage';
+import { PdcaPage } from './pages/PdcaPage';
 import { StudioCriativoPage } from './pages/StudioCriativoPage';
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ export function App() {
                 <Route path="/crm" element={<CrmPage />} />
                 <Route path="/mais" element={<MaisPage />} />
                 <Route path="/mais/estudio-criativo" element={<StudioCriativoPage />} />
+                <Route path="/mais/pdca" element={<PdcaPage />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />

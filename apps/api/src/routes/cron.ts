@@ -9,6 +9,7 @@ import { getEnv } from '../lib/env';
 import { asyncHandler, HttpError } from '../lib/http';
 import { getServiceClient } from '../lib/supabase';
 import { sincronizarContasAtivas } from '../services/cron-sync';
+import { detectarEregistrarAnomalias } from '../services/pdca';
 
 export const cronRouter: Router = Router();
 
@@ -29,6 +30,16 @@ cronRouter.post(
   asyncHandler(async (req, res) => {
     autorizarCron(req.header('authorization'));
     const resultado = await sincronizarContasAtivas(getServiceClient());
+    res.json({ data: resultado });
+  }),
+);
+
+// Check do PDCA: detecta anomalias de CPA/ROAS e gera recomendações (Sprint 7).
+cronRouter.post(
+  '/detectar-anomalias',
+  asyncHandler(async (req, res) => {
+    autorizarCron(req.header('authorization'));
+    const resultado = await detectarEregistrarAnomalias(getServiceClient());
     res.json({ data: resultado });
   }),
 );

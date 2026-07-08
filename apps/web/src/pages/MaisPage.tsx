@@ -27,6 +27,14 @@ export function MaisPage() {
         <span className="text-muted">→</span>
       </Link>
 
+      <Link to="/mais/pdca" className="card flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-content">PDCA / Otimização</p>
+          <p className="text-xs text-content-2">Anomalias detectadas e recomendações</p>
+        </div>
+        <span className="text-muted">→</span>
+      </Link>
+
       <button type="button" className="btn-ghost w-full" onClick={() => void sair()}>
         Sair
       </button>

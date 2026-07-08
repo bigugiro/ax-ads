@@ -13,6 +13,7 @@ import { estrategiasRouter } from './routes/estrategias';
 import { healthRouter } from './routes/health';
 import { iaRouter } from './routes/ia';
 import { metricasRouter } from './routes/metricas';
+import { pdcaRouter } from './routes/pdca';
 
 export function createApp(): Express {
   const app = express();
@@ -33,6 +34,8 @@ export function createApp(): Express {
   app.use(crmRouter);
   // Rotas com caminhos absolutos próprios (/ia/*, /clientes/:id/criativos, .../geracoes-ia).
   app.use(iaRouter);
+  // Rotas com caminhos absolutos próprios (/clientes/:id/anomalias, /recomendacoes/*, /regras-otimizacao).
+  app.use(pdcaRouter);
 
   app.use(notFound);
   app.use(errorHandler);

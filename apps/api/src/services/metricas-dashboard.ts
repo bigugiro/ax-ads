@@ -8,9 +8,11 @@
 import {
   janelaAnterior,
   montarDashboard,
+  resumirLinhas,
   type CampanhaMeta,
   type DashboardMetricas,
   type MetricaCampanhaDia,
+  type MetricasResumo,
   type PeriodoMetricas,
 } from '@ax-ads/shared';
 import { HttpError } from '../lib/http';
@@ -32,7 +34,7 @@ function num(v: number | string): number {
   return typeof v === 'number' ? v : Number(v);
 }
 
-async function buscarMetricasCampanha(
+export async function buscarMetricasCampanha(
   db: DbClient,
   periodo: PeriodoMetricas,
   campanhaIds: readonly string[],
@@ -108,4 +110,31 @@ export async function carregarDashboard(
   ]);
 
   return montarDashboard({ periodo, periodoAnterior, campanhas, metricasAtual, metricasAnterior });
+}
+
+/**
+ * Resumo atual x anterior por campanha (Sprint 7 — Check do PDCA).
+ * Reaproveita `buscarMetricasCampanha` (Sprint 2) e agrega com `resumirLinhas`,
+ * sem duplicar lógica de agregação.
+ */
+export async function carregarResumoPorCampanha(
+  db: DbClient,
+  campanhaIds: readonly string[],
+  dias: number,
+): Promise<Map<string, { atual: MetricasResumo; anterior: MetricasResumo }>> {
+  const periodo = periodoUltimosDias(dias);
+  const periodoAnterior = janelaAnterior(periodo);
+
+  const [metricasAtual, metricasAnterior] = await Promise.all([
+    buscarMetricasCampanha(db, periodo, campanhaIds),
+    buscarMetricasCampanha(db, periodoAnterior, campanhaIds),
+  ]);
+
+  const resultado = new Map<string, { atual: MetricasResumo; anterior: MetricasResumo }>();
+  for (const campanhaId of campanhaIds) {
+    const atual = resumirLinhas(metricasAtual.filter((m) => m.campanhaId === campanhaId));
+    const anterior = resumirLinhas(metricasAnterior.filter((m) => m.campanhaId === campanhaId));
+    resultado.set(campanhaId, { atual, anterior });
+  }
+  return resultado;
 }

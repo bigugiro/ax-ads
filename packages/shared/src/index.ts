@@ -6,5 +6,6 @@ export * from './database';
 export * from './estrategias';
 export * from './ia';
 export * from './metricas';
+export * from './pdca';
 export * from './roles';
 export * from './schemas';

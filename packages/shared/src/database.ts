@@ -12,6 +12,13 @@ import type {
   StatusEstrategiaAplicada,
 } from './estrategias';
 import type { ModeloIA, OrigemCreativo, StatusCreativo, TipoCreativo } from './ia';
+import type {
+  MetricaMonitorada,
+  OrigemRecomendacao,
+  SeveridadeAnomalia,
+  StatusRecomendacao,
+  TipoRecomendacao,
+} from './pdca';
 import type { Papel } from './roles';
 import type { Plano, StatusCliente, StatusTenant } from './schemas';
 
@@ -768,6 +775,120 @@ export interface Database {
         };
         Relationships: [];
       };
+      recomendacoes: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          campanha_id: string | null;
+          tipo: TipoRecomendacao;
+          alvo_entidade: string;
+          descricao: string;
+          impacto_estimado: string;
+          status: StatusRecomendacao;
+          origem: OrigemRecomendacao;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          campanha_id?: string | null | undefined;
+          tipo: TipoRecomendacao;
+          alvo_entidade: string;
+          descricao: string;
+          impacto_estimado: string;
+          status?: StatusRecomendacao | undefined;
+          origem: OrigemRecomendacao;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          campanha_id?: string | null | undefined;
+          tipo?: TipoRecomendacao | undefined;
+          alvo_entidade?: string | undefined;
+          descricao?: string | undefined;
+          impacto_estimado?: string | undefined;
+          status?: StatusRecomendacao | undefined;
+          origem?: OrigemRecomendacao | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
+      anomalias: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          campanha_id: string | null;
+          metrica: MetricaMonitorada;
+          valor: number;
+          esperado: number;
+          severidade: SeveridadeAnomalia;
+          detectada_em: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          campanha_id?: string | null | undefined;
+          metrica: MetricaMonitorada;
+          valor: number;
+          esperado: number;
+          severidade: SeveridadeAnomalia;
+          detectada_em?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          campanha_id?: string | null | undefined;
+          metrica?: MetricaMonitorada | undefined;
+          valor?: number | undefined;
+          esperado?: number | undefined;
+          severidade?: SeveridadeAnomalia | undefined;
+          detectada_em?: string | undefined;
+        };
+        Relationships: [];
+      };
+      regras_otimizacao: {
+        Row: {
+          id: string;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          condicao: Json;
+          acao: Json;
+          guardrails: Json;
+          ativo: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string | undefined;
+          agencia_id: string;
+          cliente_id: string;
+          nome: string;
+          condicao?: Json | undefined;
+          acao?: Json | undefined;
+          guardrails?: Json | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Update: {
+          id?: string | undefined;
+          agencia_id?: string | undefined;
+          cliente_id?: string | undefined;
+          nome?: string | undefined;
+          condicao?: Json | undefined;
+          acao?: Json | undefined;
+          guardrails?: Json | undefined;
+          ativo?: boolean | undefined;
+          created_at?: string | undefined;
+        };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -791,6 +912,11 @@ export interface Database {
       origem_criativo: OrigemCreativo;
       status_criativo: StatusCreativo;
       modelo_ia: ModeloIA;
+      tipo_recomendacao: TipoRecomendacao;
+      status_recomendacao: StatusRecomendacao;
+      origem_recomendacao: OrigemRecomendacao;
+      metrica_monitorada: MetricaMonitorada;
+      severidade_anomalia: SeveridadeAnomalia;
     };
     CompositeTypes: { [_ in never]: never };
   };
