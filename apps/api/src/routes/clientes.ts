@@ -3,7 +3,12 @@
  * RLS garante isolamento por agência; a checagem de papel é defesa adicional.
  * Alterações de estado escrevem em `audit_log`.
  */
-import { atualizarClienteSchema, criarClienteSchema, uuidSchema } from '@ax-ads/shared';
+import {
+  atualizarClienteSchema,
+  criarClienteSchema,
+  periodoQuerySchema,
+  uuidSchema,
+} from '@ax-ads/shared';
 import type { AtualizarCliente, CriarCliente } from '@ax-ads/shared';
 import { Router } from 'express';
 import { getAuth } from '../lib/auth-context';
@@ -12,6 +17,7 @@ import { asyncHandler, HttpError } from '../lib/http';
 import { authenticate } from '../middleware/auth';
 import { requireAcao } from '../middleware/require-role';
 import { validateBody, validateParam } from '../middleware/validate';
+import { campanhasDoClienteComMetricas, periodoDaQuery } from '../services/metricas';
 
 export const clientesRouter: Router = Router();
 
@@ -29,6 +35,32 @@ clientesRouter.get(
       .order('created_at', { ascending: false });
     if (error) throw new HttpError(500, 'Falha ao listar clientes', error.message);
     res.json({ data });
+  }),
+);
+
+// Campanhas do cliente com métricas agregadas do período (Sprint 2; viewer+).
+clientesRouter.get(
+  '/:id/campanhas',
+  requireAcao('ver_dashboard'),
+  validateParam('id', uuidSchema),
+  asyncHandler(async (req, res) => {
+    const query = periodoQuerySchema.safeParse(req.query);
+    if (!query.success) throw new HttpError(422, 'Query inválida', query.error.flatten());
+
+    const { db } = getAuth(req);
+    const id = uuidSchema.parse(req.params.id);
+
+    // 404 se o cliente não é da agência (RLS o esconde) ou não existe.
+    const { data: cliente, error } = await db
+      .from('clientes')
+      .select('id, nome')
+      .eq('id', id)
+      .maybeSingle();
+    if (error) throw new HttpError(500, 'Falha ao carregar cliente', error.message);
+    if (!cliente) throw new HttpError(404, 'Cliente não encontrado');
+
+    const resultado = await campanhasDoClienteComMetricas(db, id, periodoDaQuery(query.data));
+    res.json({ data: { cliente, ...resultado } });
   }),
 );
 
