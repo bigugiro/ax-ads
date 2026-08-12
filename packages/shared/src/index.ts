@@ -2,5 +2,6 @@
 export * from './ads';
 export * from './ads-provider';
 export * from './database';
+export * from './metricas';
 export * from './roles';
 export * from './schemas';
