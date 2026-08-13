@@ -31,7 +31,12 @@ describe.skipIf(!podeRodar)('Admin (Sprint 10): cross-tenant, integração', () 
   let agenciaAlvo: string;
 
   async function provisionar(nome: string, papel: Papel): Promise<Tenant> {
-    const { data: ag } = await service.from('agencias').insert({ nome }).select('id').single().throwOnError();
+    const { data: ag } = await service
+      .from('agencias')
+      .insert({ nome })
+      .select('id')
+      .single()
+      .throwOnError();
     agenciasCriadas.push(ag.id);
 
     const email = `t_${randomUUID()}@example.com`;
@@ -46,7 +51,13 @@ describe.skipIf(!podeRodar)('Admin (Sprint 10): cross-tenant, integração', () 
 
     await service
       .from('usuarios')
-      .insert({ agencia_id: ag.id, nome: 'Teste', email, papel, auth_supabase_id: authData.user.id })
+      .insert({
+        agencia_id: ag.id,
+        nome: 'Teste',
+        email,
+        papel,
+        auth_supabase_id: authData.user.id,
+      })
       .throwOnError();
 
     const anon = createClient<Database>(url!, anonKey!, { auth: { persistSession: false } });
@@ -85,12 +96,16 @@ describe.skipIf(!podeRodar)('Admin (Sprint 10): cross-tenant, integração', () 
   }, 60_000);
 
   it('usuário comum NÃO acessa /admin/agencias (403 — não é super_admin)', async () => {
-    const res = await request(app).get('/admin/agencias').set('Authorization', `Bearer ${comum.token}`);
+    const res = await request(app)
+      .get('/admin/agencias')
+      .set('Authorization', `Bearer ${comum.token}`);
     expect(res.status).toBe(403);
   });
 
   it('DoD admin: super_admin lista TODAS as agências (cross-tenant, não só a própria)', async () => {
-    const res = await request(app).get('/admin/agencias').set('Authorization', `Bearer ${admin.token}`);
+    const res = await request(app)
+      .get('/admin/agencias')
+      .set('Authorization', `Bearer ${admin.token}`);
     expect(res.status).toBe(200);
     const data = (res.body as { data: AgenciaAdmin[] }).data;
     expect(data.some((a) => a.id === comum.agenciaId)).toBe(true);
@@ -105,7 +120,11 @@ describe.skipIf(!podeRodar)('Admin (Sprint 10): cross-tenant, integração', () 
     expect(suspender.status).toBe(200);
     expect((suspender.body as { data: AgenciaAdmin }).data.status).toBe('suspenso');
 
-    const { data: row } = await service.from('agencias').select('status').eq('id', agenciaAlvo).single();
+    const { data: row } = await service
+      .from('agencias')
+      .select('status')
+      .eq('id', agenciaAlvo)
+      .single();
     expect(row?.status).toBe('suspenso');
 
     const reativar = await request(app)

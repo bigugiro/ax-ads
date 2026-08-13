@@ -15,6 +15,7 @@ Levantamento feito no Sprint 10 (pen-test básico, Seção 8 do plano). Cobre o 
 - [x] Toda ação sensível checa papel mínimo via `requireAcao` (mapa único em `packages/shared/src/roles.ts`) — auditável num só lugar.
 
 > **Bug real pego nesta sprint (não em teste unitário — no gate de integração):** montar `adminRouter` com `app.use(adminRouter)` **sem prefixo de path**, tendo `adminRouter.use(authenticate, requireSuperAdmin)` no nível do router, fazia o Express rodar esse gate pra **toda requisição do app** que chegasse até aquele ponto da cadeia de middlewares — não só pra `/admin/*`. Resultado: 44 testes de outras sprints (Studio IA, Imagem, etc.) passaram a devolver 403 pra usuários legítimos. `router.use(middleware)` sem path roda pra qualquer request que atravesse o router, incluindo requests que não vão bater em nenhuma rota definida nele — a regra agora é: **todo router com um gate "hard" (`requireSuperAdmin`, ou qualquer coisa que barra por padrão) precisa ser montado com prefixo de path** (`app.use('/admin', adminRouter)`), nunca solto na raiz. `agenciasRouter` (só `authenticate`, sem gate duro) recebeu o mesmo tratamento por consistência/defesa em profundidade, já que só `authenticate` sozinho não rejeita ninguém com JWT válido — mas ainda assim rodaria redundantemente pra rotas como `/cron/*`, que nem usam JWT.
+
 - [x] `super_admin` (Sprint 10) nunca é setável via API — só SQL direto pelo operador; rotas `/admin/*` atrás de `requireSuperAdmin`, cross-tenant por design e claramente documentado como exceção à regra de RLS.
 
 ## Segredos

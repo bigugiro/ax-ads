@@ -75,7 +75,9 @@ export function AssinaturaPage() {
             <span className="font-display text-lg font-extrabold capitalize text-content">
               {assinatura.plano}
             </span>
-            <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_STATUS[assinatura.status]}`}>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_STATUS[assinatura.status]}`}
+            >
               {ROTULO_STATUS[assinatura.status]}
             </span>
           </div>
@@ -97,7 +99,9 @@ export function AssinaturaPage() {
               disabled={trocarPlano.isPending || assinatura?.plano === p}
               onClick={() => trocarPlano.mutate(p)}
               className={`rounded-xl border p-2.5 text-center capitalize transition disabled:opacity-50 ${
-                assinatura?.plano === p ? 'border-brand bg-brand/10 text-brand' : 'border-line text-content-2'
+                assinatura?.plano === p
+                  ? 'border-brand bg-brand/10 text-brand'
+                  : 'border-line text-content-2'
               }`}
             >
               <p className="text-sm font-bold">{p}</p>

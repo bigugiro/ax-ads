@@ -252,18 +252,32 @@ export async function gerarImagens(
     ? `${payload.produto} — estilo: ${payload.estilo}`
     : payload.produto;
 
-  const imagens = await getImagemProvider().gerarImagens({ prompt, quantidade: payload.quantidade });
+  const imagens = await getImagemProvider().gerarImagens({
+    prompt,
+    quantidade: payload.quantidade,
+  });
 
   const { data: criativo, error: criErr } = await db
     .from('criativos')
-    .insert({ agencia_id: agenciaId, cliente_id: payload.cliente_id, tipo: 'imagem', conteudo: prompt })
+    .insert({
+      agencia_id: agenciaId,
+      cliente_id: payload.cliente_id,
+      tipo: 'imagem',
+      conteudo: prompt,
+    })
     .select('*')
     .single();
   if (criErr || !criativo) throw new HttpError(500, 'Falha ao salvar criativo', criErr?.message);
 
   const { data: variacoes, error: varErr } = await db
     .from('variacoes_criativo')
-    .insert(imagens.map(({ url }) => ({ agencia_id: agenciaId, criativo_id: criativo.id, conteudo: url })))
+    .insert(
+      imagens.map(({ url }) => ({
+        agencia_id: agenciaId,
+        criativo_id: criativo.id,
+        conteudo: url,
+      })),
+    )
     .select('*');
   if (varErr) throw new HttpError(500, 'Falha ao salvar variações', varErr.message);
 

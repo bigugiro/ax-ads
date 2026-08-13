@@ -18,11 +18,15 @@ describe('verificarBillingWebhookAuth', () => {
   it('rejeita header ausente, mal formado ou divergente', () => {
     expect(verificarBillingWebhookAuth(undefined, 'pagarme:s3gr3do')).toBe('invalido');
     expect(verificarBillingWebhookAuth('Bearer algo', 'pagarme:s3gr3do')).toBe('invalido');
-    expect(verificarBillingWebhookAuth(basic('pagarme:errado'), 'pagarme:s3gr3do')).toBe('invalido');
+    expect(verificarBillingWebhookAuth(basic('pagarme:errado'), 'pagarme:s3gr3do')).toBe(
+      'invalido',
+    );
   });
 
   it('rejeita base64 mal formado sem lançar', () => {
-    expect(verificarBillingWebhookAuth('Basic !!!não-é-base64!!!', 'pagarme:s3gr3do')).toBe('invalido');
+    expect(verificarBillingWebhookAuth('Basic !!!não-é-base64!!!', 'pagarme:s3gr3do')).toBe(
+      'invalido',
+    );
   });
 
   it('rejeita quando o comprimento difere (sem lançar no timingSafeEqual)', () => {

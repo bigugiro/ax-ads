@@ -32,7 +32,12 @@ describe.skipIf(!podeRodar)('Agência — marca e exclusão (Sprint 10): integra
   async function provisionar(nome: string, papel: Papel, agenciaId?: string): Promise<Tenant> {
     let agId = agenciaId;
     if (!agId) {
-      const { data: ag } = await service.from('agencias').insert({ nome }).select('id').single().throwOnError();
+      const { data: ag } = await service
+        .from('agencias')
+        .insert({ nome })
+        .select('id')
+        .single()
+        .throwOnError();
       agId = ag.id;
       agenciasCriadas.push(agId);
     }
@@ -95,7 +100,11 @@ describe.skipIf(!podeRodar)('Agência — marca e exclusão (Sprint 10): integra
     const res = await request(app)
       .patch('/agencias/marca')
       .set('Authorization', `Bearer ${owner.token}`)
-      .send({ marca_nome: 'Painel da Loja X', marca_cor: '#112233', marca_logo_url: 'https://ex.com/logo.png' });
+      .send({
+        marca_nome: 'Painel da Loja X',
+        marca_cor: '#112233',
+        marca_logo_url: 'https://ex.com/logo.png',
+      });
     expect(res.status).toBe(200);
     const data = (res.body as { data: Agencia }).data;
     expect(data.marca_nome).toBe('Painel da Loja X');
@@ -124,7 +133,9 @@ describe.skipIf(!podeRodar)('Agência — marca e exclusão (Sprint 10): integra
   });
 
   it('DoD LGPD: owner exclui a conta — agência e usuários somem de verdade', async () => {
-    const res = await request(app).delete('/agencias/me').set('Authorization', `Bearer ${owner.token}`);
+    const res = await request(app)
+      .delete('/agencias/me')
+      .set('Authorization', `Bearer ${owner.token}`);
     expect(res.status).toBe(204);
 
     const { data: agenciaDepois } = await service

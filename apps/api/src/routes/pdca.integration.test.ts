@@ -205,7 +205,9 @@ describe.skipIf(!podeRodar)('PDCA — Check/Act/Do (Sprint 7): integração + RL
       .get(`/clientes/${clienteId}/recomendacoes`)
       .set('Authorization', `Bearer ${gestorA.token}`);
     expect(res.status).toBe(200);
-    const data = (res.body as { data: Array<{ id: string; status: string; alvo_entidade: string }> }).data;
+    const data = (
+      res.body as { data: Array<{ id: string; status: string; alvo_entidade: string }> }
+    ).data;
     expect(data.length).toBeGreaterThan(0);
     expect(data[0]!.status).toBe('sugerida');
     expect(data[0]!.alvo_entidade).toBe(campanhaNome);

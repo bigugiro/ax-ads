@@ -37,7 +37,10 @@ export function _resetRateLimitParaTestes(): void {
 }
 
 /** Middleware Express — chave por IP + rota (mesmo IP não compete entre rotas diferentes). */
-export function rateLimit(nome: string, opts: { limite: number; janelaMs: number }): RequestHandler {
+export function rateLimit(
+  nome: string,
+  opts: { limite: number; janelaMs: number },
+): RequestHandler {
   return (req, _res, next) => {
     const chave = `${nome}:${req.ip ?? 'sem-ip'}`;
     if (!permitirChamada(chave, opts, Date.now())) {

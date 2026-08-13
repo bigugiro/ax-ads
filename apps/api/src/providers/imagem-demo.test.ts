@@ -7,7 +7,9 @@ import { criarDemoImagemProvider, gerarSvgPlaceholder } from './imagem-demo';
 
 describe('gerarSvgPlaceholder (puro)', () => {
   it('é determinístico: mesmo prompt+índice → mesmo data URI', () => {
-    expect(gerarSvgPlaceholder('Tênis de corrida', 0)).toBe(gerarSvgPlaceholder('Tênis de corrida', 0));
+    expect(gerarSvgPlaceholder('Tênis de corrida', 0)).toBe(
+      gerarSvgPlaceholder('Tênis de corrida', 0),
+    );
   });
 
   it('índices diferentes geram data URIs diferentes (variação visual)', () => {

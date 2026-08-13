@@ -27,8 +27,11 @@ export async function atualizarMarca(
   agenciaId: string,
   patch: AtualizarMarca,
 ): Promise<Agencia> {
-  const mudancas: { marca_nome?: string | null; marca_cor?: string | null; marca_logo_url?: string | null } =
-    {};
+  const mudancas: {
+    marca_nome?: string | null;
+    marca_cor?: string | null;
+    marca_logo_url?: string | null;
+  } = {};
   if (patch.marca_nome !== undefined) mudancas.marca_nome = patch.marca_nome;
   if (patch.marca_cor !== undefined) mudancas.marca_cor = patch.marca_cor;
   if (patch.marca_logo_url !== undefined) {

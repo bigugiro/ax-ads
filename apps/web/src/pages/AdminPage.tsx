@@ -60,7 +60,9 @@ export function AdminPage() {
             <li key={a.id} className="card space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-content">{a.nome}</span>
-                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_STATUS[a.status]}`}>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_STATUS[a.status]}`}
+                >
                   {ROTULO_STATUS[a.status]}
                 </span>
               </div>

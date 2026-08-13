@@ -37,7 +37,9 @@ export function Wordmark({
       ) : (
         <RocketMark className="h-[1.1em] w-[1.1em]" />
       )}
-      <span className={`font-display font-extrabold leading-none ${size}`}>{nome || 'Dispara'}</span>
+      <span className={`font-display font-extrabold leading-none ${size}`}>
+        {nome || 'Dispara'}
+      </span>
     </span>
   );
 }

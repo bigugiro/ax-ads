@@ -7,8 +7,12 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Code-splitting por rota (Sprint 10, perf/PWA): cada página vira um chunk
 // próprio — o bundle inicial carrega só o shell + a rota visitada.
-const DashboardPage = lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
-const CampanhasPage = lazy(() => import('./pages/CampanhasPage').then((m) => ({ default: m.CampanhasPage })));
+const DashboardPage = lazy(() =>
+  import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
+);
+const CampanhasPage = lazy(() =>
+  import('./pages/CampanhasPage').then((m) => ({ default: m.CampanhasPage })),
+);
 const EstrategiasPage = lazy(() =>
   import('./pages/EstrategiasPage').then((m) => ({ default: m.EstrategiasPage })),
 );
@@ -24,7 +28,9 @@ const AssinaturaPage = lazy(() =>
 const MarcaPage = lazy(() => import('./pages/MarcaPage').then((m) => ({ default: m.MarcaPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })));
-const SignupPage = lazy(() => import('./pages/SignupPage').then((m) => ({ default: m.SignupPage })));
+const SignupPage = lazy(() =>
+  import('./pages/SignupPage').then((m) => ({ default: m.SignupPage })),
+);
 
 const queryClient = new QueryClient();
 

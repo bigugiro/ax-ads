@@ -55,7 +55,8 @@ billingRouter.post(
       .select('email')
       .eq('id', usuarioId)
       .single();
-    if (userErr || !usuario) throw new HttpError(500, 'Falha ao carregar usuário', userErr?.message);
+    if (userErr || !usuario)
+      throw new HttpError(500, 'Falha ao carregar usuário', userErr?.message);
 
     const data = await criarCheckout({
       agenciaId,
@@ -85,9 +86,15 @@ billingRouter.post(
   rateLimit('billing-webhook', { limite: 30, janelaMs: 60_000 }),
   validateBody(webhookBillingSchema),
   asyncHandler(async (req, res) => {
-    const status = verificarBillingWebhookAuth(req.header('authorization'), getEnv().PAGARME_WEBHOOK_AUTH);
+    const status = verificarBillingWebhookAuth(
+      req.header('authorization'),
+      getEnv().PAGARME_WEBHOOK_AUTH,
+    );
     if (status === 'nao_configurado') {
-      throw new HttpError(503, 'Webhook de billing indisponível: PAGARME_WEBHOOK_AUTH não configurado');
+      throw new HttpError(
+        503,
+        'Webhook de billing indisponível: PAGARME_WEBHOOK_AUTH não configurado',
+      );
     }
     if (status === 'invalido') {
       throw new HttpError(401, 'Webhook não autorizado');

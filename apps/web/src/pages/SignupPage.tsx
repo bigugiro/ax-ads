@@ -24,9 +24,9 @@ const signupFormSchema = z.object({
   email: z.string().email('E-mail inválido'),
   senha: z.string().min(6, 'Mínimo 6 caracteres'),
   plano: z.enum(['starter', 'pro', 'agency']),
-  aceite_termos: z
-    .boolean()
-    .refine((v) => v, { message: 'É preciso aceitar os Termos de Uso e a Política de Privacidade' }),
+  aceite_termos: z.boolean().refine((v) => v, {
+    message: 'É preciso aceitar os Termos de Uso e a Política de Privacidade',
+  }),
 });
 type SignupForm = z.infer<typeof signupFormSchema>;
 
@@ -150,7 +150,11 @@ export function SignupPage() {
           </p>
 
           <label className="flex items-start gap-2 text-xs text-content-2">
-            <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" {...register('aceite_termos')} />
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 shrink-0"
+              {...register('aceite_termos')}
+            />
             <span>Li e aceito os Termos de Uso e a Política de Privacidade.</span>
           </label>
           {errors.aceite_termos && (

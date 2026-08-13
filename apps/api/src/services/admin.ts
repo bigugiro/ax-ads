@@ -36,7 +36,8 @@ export async function atualizarStatusAgencia(
     .eq('id', agenciaId)
     .select('id, nome, plano, status, created_at')
     .single();
-  if (error || !data) throw new HttpError(500, 'Falha ao atualizar status da agência', error?.message);
+  if (error || !data)
+    throw new HttpError(500, 'Falha ao atualizar status da agência', error?.message);
 
   const { data: assinatura } = await service
     .from('assinaturas')

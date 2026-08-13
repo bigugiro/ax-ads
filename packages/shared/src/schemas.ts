@@ -45,7 +45,10 @@ export const atualizarMarcaSchema = z
   .object({
     marca_nome: z.string().trim().min(1).max(60).nullable().optional(),
     marca_cor: corHexSchema.nullable().optional(),
-    marca_logo_url: z.union([z.literal(''), z.string().url()]).nullable().optional(),
+    marca_logo_url: z
+      .union([z.literal(''), z.string().url()])
+      .nullable()
+      .optional(),
   })
   .refine((v) => Object.values(v).some((x) => x !== undefined), {
     message: 'Informe ao menos um campo para atualizar',

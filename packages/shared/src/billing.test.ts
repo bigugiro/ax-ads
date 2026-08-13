@@ -16,6 +16,8 @@ describe('PRECOS_PLANO (puro)', () => {
 describe('formatarPrecoPlano', () => {
   it('formata centavos como moeda BRL', () => {
     expect(formatarPrecoPlano('free')).toContain('0,00');
-    expect(formatarPrecoPlano('starter')).toBe((PRECOS_PLANO.starter / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+    expect(formatarPrecoPlano('starter')).toBe(
+      (PRECOS_PLANO.starter / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+    );
   });
 });

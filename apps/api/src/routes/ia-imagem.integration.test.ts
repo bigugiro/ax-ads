@@ -105,7 +105,12 @@ describe.skipIf(!podeRodar)('Criativos visuais IA — Sprint 8: integração + R
     const res = await request(app)
       .post('/ia/imagem')
       .set('Authorization', `Bearer ${gestorA.token}`)
-      .send({ cliente_id: clienteA, produto: 'Tênis de corrida leve', estilo: 'minimalista', quantidade: 3 });
+      .send({
+        cliente_id: clienteA,
+        produto: 'Tênis de corrida leve',
+        estilo: 'minimalista',
+        quantidade: 3,
+      });
     expect(res.status).toBe(201);
 
     const corpo = (res.body as { data: { criativo: CriativoComVariacoes; custo: number } }).data;
@@ -150,10 +155,10 @@ describe.skipIf(!podeRodar)('Criativos visuais IA — Sprint 8: integração + R
     const b = await chamar();
     expect(a.status).toBe(201);
     expect(b.status).toBe(201);
-    const urlA = (a.body as { data: { criativo: CriativoComVariacoes } }).data.criativo.variacoes[0]!
-      .conteudo;
-    const urlB = (b.body as { data: { criativo: CriativoComVariacoes } }).data.criativo.variacoes[0]!
-      .conteudo;
+    const urlA = (a.body as { data: { criativo: CriativoComVariacoes } }).data.criativo
+      .variacoes[0]!.conteudo;
+    const urlB = (b.body as { data: { criativo: CriativoComVariacoes } }).data.criativo
+      .variacoes[0]!.conteudo;
     expect(urlA).toBe(urlB);
   });
 

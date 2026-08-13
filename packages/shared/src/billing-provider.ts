@@ -21,6 +21,9 @@ export interface BillingAssinaturaCriada {
 
 export interface BillingProvider {
   readonly nome: string;
-  criarAssinatura(params: { plano: Plano; cliente: BillingCliente }): Promise<BillingAssinaturaCriada>;
+  criarAssinatura(params: {
+    plano: Plano;
+    cliente: BillingCliente;
+  }): Promise<BillingAssinaturaCriada>;
   cancelarAssinatura(subscriptionId: string): Promise<void>;
 }

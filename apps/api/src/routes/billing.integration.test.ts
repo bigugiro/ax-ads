@@ -56,7 +56,13 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
 
     await service
       .from('usuarios')
-      .insert({ agencia_id: ag.id, nome: 'Teste', email, papel, auth_supabase_id: authData.user.id })
+      .insert({
+        agencia_id: ag.id,
+        nome: 'Teste',
+        email,
+        papel,
+        auth_supabase_id: authData.user.id,
+      })
       .throwOnError();
 
     const anon = createClient<Database>(url!, anonKey!, { auth: { persistSession: false } });
@@ -130,7 +136,10 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
 
   it('"usar sem intervenção manual": loga direto com o e-mail/senha do signup', async () => {
     const anon = createClient<Database>(url!, anonKey!, { auth: { persistSession: false } });
-    const { data, error } = await anon.auth.signInWithPassword({ email: emailOwner, password: senhaOwner });
+    const { data, error } = await anon.auth.signInWithPassword({
+      email: emailOwner,
+      password: senhaOwner,
+    });
     expect(error).toBeNull();
     tokenOwner = data.session!.access_token;
   });
@@ -164,7 +173,13 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
     authUsersCriados.push(authData.user.id);
     await service
       .from('usuarios')
-      .insert({ agencia_id: agenciaId, nome: 'Membro', email, papel, auth_supabase_id: authData.user.id })
+      .insert({
+        agencia_id: agenciaId,
+        nome: 'Membro',
+        email,
+        papel,
+        auth_supabase_id: authData.user.id,
+      })
       .throwOnError();
     const anon = createClient<Database>(url!, anonKey!, { auth: { persistSession: false } });
     const { data: sess } = await anon.auth.signInWithPassword({ email, password });
@@ -190,7 +205,9 @@ describe.skipIf(!podeRodar)('Billing & onboarding (Sprint 9): integração + RLS
 
   it('isolamento RLS: tenant B não enxerga a assinatura de A', async () => {
     const tenantB = await provisionar('Agência B — Billing', 'gestor');
-    const res = await request(app).get('/assinatura').set('Authorization', `Bearer ${tenantB.token}`);
+    const res = await request(app)
+      .get('/assinatura')
+      .set('Authorization', `Bearer ${tenantB.token}`);
     expect(res.status).toBe(200);
     expect((res.body as { data: unknown }).data).toBeNull();
   });

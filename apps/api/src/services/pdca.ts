@@ -47,7 +47,8 @@ interface CampanhaMonitorada {
 /** Texto padrão quando a IA não está disponível — cron não pode falhar por isso. */
 function descricaoFallback(nome: string, metrica: 'cpa' | 'roas', variacaoPct: number): string {
   const pct = Math.round(variacaoPct * 100);
-  if (metrica === 'cpa') return `CPA da campanha "${nome}" subiu ${pct}% no período — considere revisar ou pausar.`;
+  if (metrica === 'cpa')
+    return `CPA da campanha "${nome}" subiu ${pct}% no período — considere revisar ou pausar.`;
   return `ROAS da campanha "${nome}" caiu ${pct}% no período — considere revisar a campanha.`;
 }
 
@@ -179,7 +180,11 @@ export async function detectarEregistrarAnomalias(
     }
   }
 
-  return { campanhasAnalisadas: campanhas.length, anomalias: totalAnomalias, recomendacoes: totalRecomendacoes };
+  return {
+    campanhasAnalisadas: campanhas.length,
+    anomalias: totalAnomalias,
+    recomendacoes: totalRecomendacoes,
+  };
 }
 
 export async function listarRecomendacoes(
@@ -195,13 +200,18 @@ export async function listarRecomendacoes(
   if (filtros.status) query = query.eq('status', filtros.status);
   const { data, error } = await query;
   if (error) throw new HttpError(500, 'Falha ao listar recomendações', error.message);
-  return (data as unknown as Array<Recomendacao & { campanhas: { nome: string } | null }>).map((r) => ({
-    ...r,
-    campanha_nome: r.campanhas?.nome ?? null,
-  }));
+  return (data as unknown as Array<Recomendacao & { campanhas: { nome: string } | null }>).map(
+    (r) => ({
+      ...r,
+      campanha_nome: r.campanhas?.nome ?? null,
+    }),
+  );
 }
 
-export async function listarAnomalias(db: DbClient, clienteId: string): Promise<AnomaliaComContexto[]> {
+export async function listarAnomalias(
+  db: DbClient,
+  clienteId: string,
+): Promise<AnomaliaComContexto[]> {
   const { data, error } = await db
     .from('anomalias')
     .select('*, campanhas(nome)')
@@ -217,7 +227,12 @@ export async function listarAnomalias(db: DbClient, clienteId: string): Promise<
 /** Do: muda o status; se aprovado como aplicável, aplica de verdade via AdsProvider. */
 export async function atualizarRecomendacao(
   db: DbClient,
-  params: { agenciaId: string; usuarioId: string; recomendacaoId: string; patch: AtualizarRecomendacao },
+  params: {
+    agenciaId: string;
+    usuarioId: string;
+    recomendacaoId: string;
+    patch: AtualizarRecomendacao;
+  },
 ): Promise<Recomendacao> {
   const { agenciaId, usuarioId, recomendacaoId, patch } = params;
 
@@ -248,11 +263,15 @@ export async function atualizarRecomendacao(
     .eq('id', recomendacaoId)
     .select('*')
     .single();
-  if (updErr || !atualizada) throw new HttpError(500, 'Falha ao atualizar recomendação', updErr?.message);
+  if (updErr || !atualizada)
+    throw new HttpError(500, 'Falha ao atualizar recomendação', updErr?.message);
   return atualizada;
 }
 
-export async function listarRegras(db: DbClient, filtros: ListarRegrasQuery): Promise<RegraOtimizacao[]> {
+export async function listarRegras(
+  db: DbClient,
+  filtros: ListarRegrasQuery,
+): Promise<RegraOtimizacao[]> {
   let query = db.from('regras_otimizacao').select('*').order('created_at', { ascending: false });
   if (filtros.cliente_id) query = query.eq('cliente_id', filtros.cliente_id);
   const { data, error } = await query;

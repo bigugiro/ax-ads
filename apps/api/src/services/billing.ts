@@ -76,7 +76,10 @@ export async function criarSignup(
   }
 }
 
-export async function buscarAssinatura(db: DbClient, agenciaId: string): Promise<Assinatura | null> {
+export async function buscarAssinatura(
+  db: DbClient,
+  agenciaId: string,
+): Promise<Assinatura | null> {
   const { data, error } = await db
     .from('assinaturas')
     .select('*')

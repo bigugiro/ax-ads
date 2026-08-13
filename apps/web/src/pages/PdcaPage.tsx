@@ -50,7 +50,9 @@ export function PdcaPage() {
         <h1 id="page-title" className="mt-1 font-display text-2xl font-extrabold">
           PDCA / Otimização
         </h1>
-        <p className="text-sm text-muted">Anomalias de CPA/ROAS e recomendações do motor de melhoria contínua.</p>
+        <p className="text-sm text-muted">
+          Anomalias de CPA/ROAS e recomendações do motor de melhoria contínua.
+        </p>
       </div>
 
       {clientes.length > 0 && (
@@ -71,7 +73,11 @@ export function PdcaPage() {
         </label>
       )}
 
-      <div role="tablist" aria-label="Seção" className="flex rounded-xl border border-line bg-surface p-0.5">
+      <div
+        role="tablist"
+        aria-label="Seção"
+        className="flex rounded-xl border border-line bg-surface p-0.5"
+      >
         {(['recomendacoes', 'anomalias'] as const).map((a) => (
           <button
             key={a}
@@ -87,7 +93,12 @@ export function PdcaPage() {
         ))}
       </div>
 
-      {clienteId && (aba === 'recomendacoes' ? <Recomendacoes clienteId={clienteId} /> : <Anomalias clienteId={clienteId} />)}
+      {clienteId &&
+        (aba === 'recomendacoes' ? (
+          <Recomendacoes clienteId={clienteId} />
+        ) : (
+          <Anomalias clienteId={clienteId} />
+        ))}
     </section>
   );
 }
@@ -112,7 +123,8 @@ function Recomendacoes({ clienteId }: { clienteId: string }) {
   });
 
   if (isPending) return <p className="text-sm text-muted">Carregando…</p>;
-  if (!data || data.length === 0) return <p className="text-sm text-muted">Nenhuma recomendação por aqui ainda.</p>;
+  if (!data || data.length === 0)
+    return <p className="text-sm text-muted">Nenhuma recomendação por aqui ainda.</p>;
 
   return (
     <div className="space-y-3">
@@ -162,7 +174,8 @@ function Anomalias({ clienteId }: { clienteId: string }) {
   });
 
   if (isPending) return <p className="text-sm text-muted">Carregando…</p>;
-  if (!data || data.length === 0) return <p className="text-sm text-muted">Nenhuma anomalia detectada ainda.</p>;
+  if (!data || data.length === 0)
+    return <p className="text-sm text-muted">Nenhuma anomalia detectada ainda.</p>;
 
   return (
     <ul className="space-y-2">
@@ -170,14 +183,18 @@ function Anomalias({ clienteId }: { clienteId: string }) {
         <li key={a.id} className="card space-y-1.5">
           <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-semibold text-content">{a.campanha_nome ?? '—'}</span>
-            <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_SEVERIDADE[a.severidade]}`}>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${COR_SEVERIDADE[a.severidade]}`}
+            >
               {ROTULO_SEVERIDADE[a.severidade]}
             </span>
           </div>
           <p className="text-xs text-content-2">
             {a.metrica.toUpperCase()}: {a.valor.toFixed(2)} (esperado {a.esperado.toFixed(2)})
           </p>
-          <p className="text-[11px] text-muted">{new Date(a.detectada_em).toLocaleString('pt-BR')}</p>
+          <p className="text-[11px] text-muted">
+            {new Date(a.detectada_em).toLocaleString('pt-BR')}
+          </p>
         </li>
       ))}
     </ul>

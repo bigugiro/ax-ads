@@ -81,7 +81,13 @@ export function StudioCriativoPage() {
               aba === a ? 'bg-brand text-brand-fg' : 'text-muted'
             }`}
           >
-            {a === 'analise' ? 'Análise' : a === 'headlines' ? 'Headlines' : a === 'imagem' ? 'Imagem' : 'Copy'}
+            {a === 'analise'
+              ? 'Análise'
+              : a === 'headlines'
+                ? 'Headlines'
+                : a === 'imagem'
+                  ? 'Imagem'
+                  : 'Copy'}
           </button>
         ))}
       </div>

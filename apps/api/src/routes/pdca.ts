@@ -12,7 +12,11 @@ import {
   listarRegrasQuerySchema,
   uuidSchema,
 } from '@ax-ads/shared';
-import type { AtualizarRecomendacao, AtualizarRegraOtimizacao, CriarRegraOtimizacao } from '@ax-ads/shared';
+import type {
+  AtualizarRecomendacao,
+  AtualizarRegraOtimizacao,
+  CriarRegraOtimizacao,
+} from '@ax-ads/shared';
 import { Router } from 'express';
 import { getAuth } from '../lib/auth-context';
 import { asyncHandler, HttpError } from '../lib/http';

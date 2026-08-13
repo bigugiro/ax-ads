@@ -158,7 +158,13 @@ export function detectarAnomalias(
     const variacao = (atual.cpa - anterior.cpa) / anterior.cpa; // CPA subir é ruim
     const severidade = classificarSeveridade(variacao);
     if (severidade) {
-      anomalias.push({ metrica: 'cpa', valor: atual.cpa, esperado: anterior.cpa, severidade, variacaoPct: variacao });
+      anomalias.push({
+        metrica: 'cpa',
+        valor: atual.cpa,
+        esperado: anterior.cpa,
+        severidade,
+        variacaoPct: variacao,
+      });
     }
   }
 
@@ -166,7 +172,13 @@ export function detectarAnomalias(
     const variacao = (anterior.roas - atual.roas) / anterior.roas; // ROAS cair é ruim
     const severidade = classificarSeveridade(variacao);
     if (severidade) {
-      anomalias.push({ metrica: 'roas', valor: atual.roas, esperado: anterior.roas, severidade, variacaoPct: variacao });
+      anomalias.push({
+        metrica: 'roas',
+        valor: atual.roas,
+        esperado: anterior.roas,
+        severidade,
+        variacaoPct: variacao,
+      });
     }
   }
 
