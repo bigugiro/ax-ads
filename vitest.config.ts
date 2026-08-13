@@ -13,6 +13,12 @@ export default defineConfig({
     // Serializar os arquivos torna a suíte determinística — reforça o provider
     // singleton em memória e evita disputa no banco. Custo de tempo é aceitável.
     fileParallelism: false,
+    // Testes de integração batem no Supabase remoto (serial): as idas de rede
+    // somam e, sob carga do CI, tests simples passam dos 5s padrão do Vitest —
+    // gerando timeouts flaky (um teste diferente a cada run). 30s dá folga sem
+    // mascarar travamento real; hooks pesados mantêm o próprio timeout explícito.
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
     coverage: {
       provider: 'v8',
       reports: ['text', 'html'],
