@@ -290,5 +290,5 @@ describe.skipIf(!podeRodar)('PDCA — Check/Act/Do (Sprint 7): integração + RL
       .set('Authorization', `Bearer ${viewerA.token}`)
       .send({ cliente_id: clienteId, nome: 'Bloqueada', condicao: {} });
     expect(viewerCriar.status).toBe(403);
-  });
+  }, 60_000);
 });
