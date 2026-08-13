@@ -31,6 +31,12 @@ const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default:
 const SignupPage = lazy(() =>
   import('./pages/SignupPage').then((m) => ({ default: m.SignupPage })),
 );
+const RecuperarSenhaPage = lazy(() =>
+  import('./pages/RecuperarSenhaPage').then((m) => ({ default: m.RecuperarSenhaPage })),
+);
+const RedefinirSenhaPage = lazy(() =>
+  import('./pages/RedefinirSenhaPage').then((m) => ({ default: m.RedefinirSenhaPage })),
+);
 
 const queryClient = new QueryClient();
 
@@ -47,6 +53,8 @@ export function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/recuperar-senha" element={<RecuperarSenhaPage />} />
+              <Route path="/redefinir-senha" element={<RedefinirSenhaPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route element={<AppShell />}>
                   <Route path="/" element={<DashboardPage />} />

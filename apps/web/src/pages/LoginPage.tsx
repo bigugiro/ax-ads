@@ -73,6 +73,11 @@ export function LoginPage() {
               {...register('senha')}
             />
             {errors.senha && <p className="mt-1 text-sm text-danger">{errors.senha.message}</p>}
+            <div className="mt-1 text-right">
+              <Link to="/recuperar-senha" className="text-sm font-medium text-brand">
+                Esqueci minha senha
+              </Link>
+            </div>
           </div>
 
           {erro && (

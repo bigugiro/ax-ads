@@ -8,6 +8,10 @@ interface AuthState {
   carregando: boolean;
   entrar: (email: string, senha: string) => Promise<void>;
   sair: () => Promise<void>;
+  /** Dispara o e-mail de redefinição (link volta para `/redefinir-senha`). */
+  recuperarSenha: (email: string) => Promise<void>;
+  /** Define a nova senha usando a sessão de recovery criada pelo link do e-mail. */
+  redefinirSenha: (novaSenha: string) => Promise<void>;
 }
 
 const AuthCtx = createContext<AuthState | undefined>(undefined);
@@ -38,6 +42,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       sair: async () => {
         await supabase.auth.signOut();
+      },
+      recuperarSenha: async (email) => {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/redefinir-senha`,
+        });
+        if (error) throw new Error(error.message);
+      },
+      redefinirSenha: async (novaSenha) => {
+        const { error } = await supabase.auth.updateUser({ password: novaSenha });
+        if (error) throw new Error(error.message);
       },
     }),
     [session, carregando],
